@@ -4,48 +4,56 @@ import com.github.blovemaple.mj.object.Tile;
 import com.github.blovemaple.mj.object.TileType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import AgentBot.OnePlayerStrategy;
+import AgentBot.WinJudge;
 
 public class MonteCarloSimulation {
-  private List<Tile> leftTileWall;
+  private List<TileType> leftTileWall;
   private OnePlayerStrategy agentStrat;
-  private List<Tile> myHand;
-  private Map<Integer, List<Tile>> simuHands;
+  private List<TileType> myHand;
+  private Map<Integer, List<TileType>> simuHands;
 
-  public MonteCarloSimulation(List<Tile> leftTileWall, List<Tile> myHand, List<Tile> simuAliveTile1, List<Tile> simuAliveTile2, List<Tile> simuAliveTile3) {
+  public MonteCarloSimulation(List<TileType> leftTileWall, List<Tile> originHand, Map<Integer, List<TileType>> simuHands) {
     this.leftTileWall = leftTileWall;
     this.agentStrat = OnePlayerStrategy.getInstance();
-    this.myHand = myHand;
-    simuHands = new HashMap<>();
-    simuHands.put(1, simuAliveTile1);
-    simuHands.put(2, simuAliveTile2);
-    simuHands.put(3, simuAliveTile3);
+    this.myHand = new ArrayList<>();
+    for (Tile tile: originHand) {
+      myHand.add(tile.type());
+    }
+    this.simuHands = simuHands;
   }
 
   public TileType chooseDiscardTile(Set<TileType> discardChoices) {
+    long startTime = System.nanoTime();
+    long estimatedTime = System.nanoTime();
     int maxScore = Integer.MIN_VALUE;
     TileType maxTile = null;
+    //todo:try the tile with highest UTC
     //choose the tile with max score to discard
-    for (TileType tileType: discardChoices) {
-      StateNode root = new StateNode(null, tileType, null);
-      List<Tile> curtMyHand = new ArrayList<Tile>(myHand);
-      simuHands.put(4, curtMyHand);
-      int score = simulateGame(root, discardTile(tileType, curtMyHand), curtMyHand);
-      if (score > maxScore) {
-        maxScore = score;
-        maxTile = tileType;
+    while (TimeUnit.NANOSECONDS.toSeconds(estimatedTime-startTime) < 10) {
+      for (TileType tileType : discardChoices) {
+        StateNode root = new StateNode(null, tileType, null);
+        List<TileType> curtMyHand = new ArrayList<>(myHand);
+        curtMyHand.remove(tileType);
+        simuHands.put(4, curtMyHand);
+        int score = simulateGame(root, tileType, curtMyHand);
+        if (score > maxScore) {
+          maxScore = score;
+          maxTile = tileType;
+        }
       }
+      estimatedTime = System.nanoTime();
     }
     return maxTile;
   }
 
-  private int simulateGame(StateNode root, Tile discardTile, List<Tile> curtMyHand) {
+  private int simulateGame(StateNode root, TileType discardTile, List<TileType> curtMyHand) {
     if (checkMeDianPao(root, discardTile)) {
       return root.getReward();
     }
@@ -54,7 +62,7 @@ public class MonteCarloSimulation {
     StateNode nextNode = null;
     while (true) {
       for (int i = 1; i <= 4; i++) {
-        Tile next = leftTileWall.remove(new Random().nextInt(leftTileWall.size()));
+        TileType next = leftTileWall.remove(new Random().nextInt(leftTileWall.size()));
         nextNode = (i == 4)? myTurn(i, curtNode, next, curtMyHand):otherTurn(i, curtNode, next, curtMyHand);
         if (nextNode == null) {
           return curtNode.getReward();
@@ -64,27 +72,17 @@ public class MonteCarloSimulation {
     }
   }
 
-  private Tile discardTile(TileType tileType, List<Tile> curtMyHand) {
-    for (Tile tile: curtMyHand) {
-      if (tile.type() == tileType) {
-        curtMyHand.remove(tile);
-        return tile;
-      }
-    }
-    return null;
-  }
-
   /**
    * Assume other player get a tile and discard it right away
    * @return
    */
-  private StateNode otherTurn(int id, StateNode parent, Tile newTile, List<Tile> myCurtHand) {
-    StateNode newNode = new StateNode(newTile.type(), null, parent);
+  private StateNode otherTurn(int id, StateNode parent, TileType newTile, List<TileType> myCurtHand) {
+    StateNode newNode = new StateNode(newTile, null, parent);
     if (checkZiMo(id, newNode, newTile, simuHands.get(id))) {
       backPropagation(newNode);
       return null;
     }
-    newNode.setDiscardTile(newTile.type());
+    newNode.setDiscardTile(newTile);
     if (isWin(newTile, myCurtHand)) {
       newNode.setReward(1);
       backPropagation(newNode);
@@ -93,14 +91,13 @@ public class MonteCarloSimulation {
     return newNode;
   }
 
-  private boolean isWin(Tile newTile, List<Tile> hand) {
-    List<Tile> newHand = new ArrayList<>(hand);
+  private boolean isWin(TileType newTile, List<TileType> hand) {
+    List<TileType> newHand = new ArrayList<>(hand);
     newHand.add(newTile);
-    //todo:placeholder for isWin(newHand)
-    return false;
+    return new WinJudge().isWin(agentStrat.divideTypeBySuit(newHand));
   }
 
-  private boolean checkZiMo(int id, StateNode curtNode, Tile newTile, List<Tile> curtHand) {
+  private boolean checkZiMo(int id, StateNode curtNode, TileType newTile, List<TileType> curtHand) {
     boolean isZiMo = isWin(newTile, curtHand);
     if (isZiMo) {
       int curtReward = (id == 4)? 3:-1;
@@ -110,8 +107,8 @@ public class MonteCarloSimulation {
     return false;
   }
 
-  private StateNode myTurn(int id, StateNode parent, Tile newTile, List<Tile> curtHand) {
-    StateNode newNode = new StateNode(newTile.type(), null, parent);
+  private StateNode myTurn(int id, StateNode parent, TileType newTile, List<TileType> curtHand) {
+    StateNode newNode = new StateNode(newTile, null, parent);
     if (checkZiMo(id, newNode, newTile, curtHand)) {
       backPropagation(newNode);
       return null;
@@ -123,25 +120,21 @@ public class MonteCarloSimulation {
     for (TileType toDiscard: discardCandis) {
       if (i == rd) {
         newNode.setDiscardTile(toDiscard);
-        for (Tile t: curtHand) {
-          if (t.type() == toDiscard) {
-            curtHand.remove(t);
-            if (checkMeDianPao(newNode, t)) {
-              backPropagation(newNode);
-              return null;
-            }
-            return newNode;
-          }
+        curtHand.remove(toDiscard);
+        if (checkMeDianPao(newNode, toDiscard)) {
+          backPropagation(newNode);
+          return null;
         }
+        return newNode;
       }
       i++;
     }
     return null;
   }
 
-  private boolean checkMeDianPao(StateNode curtNode, Tile newTile) {
+  private boolean checkMeDianPao(StateNode curtNode, TileType newTile) {
     int numOfWinPlys = 0;
-    for (Map.Entry<Integer, List<Tile>> ply: simuHands.entrySet()) {
+    for (Map.Entry<Integer, List<TileType>> ply: simuHands.entrySet()) {
       if (isWin(newTile, ply.getValue())) {
         numOfWinPlys += 1;
       }

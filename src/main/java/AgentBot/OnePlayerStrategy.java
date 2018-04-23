@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import AgentBot.MonteCarloSimulation.MonteCarloSimulation;
+
 /**
  * For CS5100 Final Project.
  * One-player strategy.
@@ -22,6 +24,7 @@ public class OnePlayerStrategy {
   private List<Action> actions;
   private HandFactory factory = HandFactory.getHandFactory();
   private static OnePlayerStrategy s = new OnePlayerStrategy();
+  private int round = 0;
 
 
   //Parameter grading each set
@@ -64,6 +67,7 @@ public class OnePlayerStrategy {
    * @return
    */
   public Action discardOnePlayerStategy(){
+    round++;
     Map<TileSuit, int[]> divided = (divideBySuit(tilesInHand));
     Set<TileType> discardChoices = discardChoice(divided);
     if(discardChoices.size() == 1){
@@ -71,20 +75,93 @@ public class OnePlayerStrategy {
       System.out.println("Action: " + result.toString() );
       return result;
     }
-    double maxGrade = - Double.MAX_VALUE;
     TileType best = (TileType) discardChoices.toArray()[0];
-    for(TileType discard: discardChoices){
-      Map<TileSuit, int[]> afterDiscard = inHandDiscard1(divided, discard);
-      double grade = 0;
-      for (Map.Entry<TileSuit, int[]> entry:afterDiscard.entrySet()){
-        grade += maxGrade(entry.getValue(),entry.getKey());
+    if (round < 10) {
+      double maxGrade = -Double.MAX_VALUE;
+      for (TileType discard : discardChoices) {
+        Map<TileSuit, int[]> afterDiscard = inHandDiscard1(divided, discard);
+        double grade = 0;
+        for (Map.Entry<TileSuit, int[]> entry : afterDiscard.entrySet()) {
+          grade += maxGrade(entry.getValue(), entry.getKey());
+        }
+        if (grade > maxGrade) best = discard;
       }
-      if(grade > maxGrade) best = discard;
+    } else {
+      Map<Integer, List<TileType>> plyerHands = new HandGenerator().randomHandsFor3Players();
+      List<TileType> leftTileWall = getSimTileWall(plyerHands);
+      MonteCarloSimulation MCS = new MonteCarloSimulation(leftTileWall, tilesInHand, plyerHands);
+      best = MCS.chooseDiscardTile(discardChoices);
     }
     System.out.println("Action: " + best.toString());
     return tileToAction(best);
   }
 
+  private List<TileType> getSimTileWall(Map<Integer, List<TileType>> plyerHands) {
+    List<TileType> leftTileWall = new ArrayList<>();
+    int[][] numRank = new int[3][9];
+    int[] nonNumRank = new int[7];
+    buildTable(numRank, nonNumRank);
+    for (List<TileType> hand: plyerHands.values()) {
+      for (TileType tile: hand) {
+        if (tile.isNumberRank()) {
+          numRank[checkRank(tile)][tile.number()-1]--;
+        } else {
+          nonNumRank[tile.notNumberIndex()]--;
+        }
+      }
+    }
+    for (int i = 0; i < 3; i++) {
+      for (int j = 0; j < 9; j++) {
+        int count = numRank[i][j];
+        while (count > 0) {
+          leftTileWall.add(TileType.of(checkRankName(i), j+1));
+          count--;
+        }
+      }
+    }
+    for (int i = 0; i < 7; i++) {
+      leftTileWall.add(TileType.ofNoNumber(i));
+    }
+    return leftTileWall;
+  }
+
+  /**
+   * WAN = 0, BING = 1, TIAO = 2
+   * @param numRank
+   * @param nonNumRank
+   */
+  private void buildTable(int[][] numRank, int[] nonNumRank) {
+    for (Tile tile: unknownTiles) {
+      TileType tileType = tile.type();
+      if (tileType.isNumberRank()) {
+        int number = tileType.number()-1;
+        int rank = checkRank(tileType);
+        numRank[rank][number]++;
+      } else {
+        nonNumRank[tileType.notNumberIndex()]++;
+      }
+    }
+  }
+
+  private TileSuit checkRankName(int i) {
+    switch (i) {
+      case 0: return TileSuit.WAN;
+      case 1: return TileSuit.BING;
+      case 2: return TileSuit.TIAO;
+    }
+    return null;
+  }
+
+  private int checkRank(TileType tileType) {
+    if (tileType.suit().equals(TileSuit.WAN)) {
+      return 0;
+    } else if (tileType.suit().equals(TileSuit.BING)) {
+      return 1;
+    } else if (tileType.suit().equals(TileSuit.TIAO)) {
+      return 2;
+    }
+    return -1;
+  }
   /**
    *
    */
