@@ -14,8 +14,8 @@ public class WinTest {
 
   @Test
   public void test(){
-    int[] numberSuit = {1,1,1,0,0,0,0,0,3};
-    int[] stickSuit = {0,1,1,1,0,0,0,0,0};
+    int[] numberSuit = {1,1,1,0,0,3,0,0,3};
+    int[] stickSuit = {0,0,0,0,0,0,0,0,0};
     int[] ballSuit = {0,1,1,1,0,0,0,0,0};
     int[] windsAndDragons = {0,0,2,0,0,0,0};
 

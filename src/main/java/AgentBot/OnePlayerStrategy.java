@@ -259,6 +259,37 @@ public class OnePlayerStrategy {
     return map;
   }
 
+  public Map<TileSuit, int[]> divideTypeBySuit(List<TileType> tiles) {
+    int[] windAndDragon = new int[7];
+    int[] number = new int[9];
+    int[] stick = new int[9];
+    int[] ball = new int[9];
+    for (TileType tileType : tiles) {
+      if(!tileType.isNumberRank()){
+        //ignore hua suit
+        if(tileType.suit().equals(TileSuit.ZI)) windAndDragon[tileType.notNumberIndex()]++;
+        continue;
+      }
+      switch (tileType.suit()) {
+        case WAN:
+          number[tileType.number() - 1]++;
+          continue;
+        case BING:
+          ball[tileType.number() - 1]++;
+          continue;
+        case TIAO:
+          stick[tileType.number() - 1]++;
+      }
+    }
+    Map<TileSuit, int[]> map = new HashMap<>();
+    map.put(TileSuit.BING, ball);
+    map.put(TileSuit.TIAO, stick);
+    map.put(TileSuit.WAN, number);
+    map.put(TileSuit.ZI, windAndDragon);
+    return map;
+  }
+
+
   /**
    * The number of a tile type unknown.
    * @param tileType
