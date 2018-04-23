@@ -21,7 +21,7 @@ public class OnePlayerStrategyTest {
   TileType[] sticks = new TileType[9];
   TileType[] balls = new TileType[9];
   TileType[] windsAndDragons = new TileType[7];
-  OnePlayerStrategy strategy = OnePlayerStrategy.getInstance();
+  OnePlayerStrategy strategy = new OnePlayerStrategy();
 
   @Before
   public void setup(){

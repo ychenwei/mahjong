@@ -45,7 +45,6 @@ public class OnePlayerStrategy {
 //    return s;
 //  }
 
-
   public void setRound(int round) {
     this.round = round;
   }
@@ -324,16 +323,20 @@ public class OnePlayerStrategy {
    */
   public Set<TileType> discardChoice(Map<TileSuit, int[]> groupedTiles) {
     Set<TileType> discardChoices = new HashSet<>();
+    //for winds and dragons
+    int[] windsAndDragon = groupedTiles.get(TileSuit.ZI);
+    for(int i = 0; i<windsAndDragon.length; i++){
+      if(windsAndDragon[i] == 1){
+        discardChoices.add(TileType.of(TileSuit.ZI, i));
+        return discardChoices;
+      }
+    }
+
     for (TileSuit suit : groupedTiles.keySet()) {
       int[] tilesInSuit = groupedTiles.get(suit);
       for (int i = 0; i < tilesInSuit.length; i++) {
-        if (tilesInSuit[i] == 0) continue;
+        if (tilesInSuit[i] == 0 || suit.equals(TileSuit.ZI)) continue;
         if (tilesInSuit[i] == 1) {
-          //for winds and dragons
-          if(suit.equals(TileSuit.ZI)){
-            discardChoices.add(TileType.of(suit, i));
-            return discardChoices;
-          }
           //for independent
           boolean independent = empty(i, 1, tilesInSuit)
                   && empty(i, 2, tilesInSuit)
@@ -374,4 +377,18 @@ public class OnePlayerStrategy {
             toDiscard.toString());
   }
 
+//  class SuitComparator implements Comparator<TileType> {
+//
+//    @Override
+//    public int compare(TileType o1, TileType o2) {
+//      if(o1.suit().equals(TileSuit.ZI) && !o2.suit().equals(TileSuit.ZI)) return
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//      return obj.equals(this);
+//    }
+//  }
+
 }
+
