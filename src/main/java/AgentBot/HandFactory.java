@@ -35,18 +35,17 @@ public class HandFactory {
     Set<List<String>> result = new HashSet<>();
     for (int i = 0; i < inHand.length; i++) {
       if (inHand[i] < 1) continue;
+      int[] copyHand = copyArray(inHand);
       //possibility of A AA AAA
       for (int j = 1; j <= inHand[i]; j++) {
         if (j == 1) {
           String cSet = "";
-          int[] copyHand = copyArray(inHand);
 
           for (int seq = i; seq <= i + 2; seq++) {
             if (seq >= inHand.length || copyHand[seq] < 1) continue;
             cSet += seq;
             copyHand[seq] -= 1;
           }
-
 //            System.out.println("i: " + i + " j: " + j+"inhand: " + arrayToString
 //                    (inHand));
 
@@ -55,9 +54,11 @@ public class HandFactory {
           for (List<String> s : a) {
             s.add(cSet);
             s.sort(Comparator.naturalOrder());
+            if(s.equals(""))continue;
             newA.add(s);
           }
           result.addAll(newA);
+          continue;
         }
 
         String currentSet = "";
@@ -173,6 +174,7 @@ public class HandFactory {
     map.get(COMPLETE).add(fourNum);
     map.get(COMPLETE).add(completeNum);
     map.get(TUPLE).add(tupleNum);
+    System.out.println(map);
     return map;
   }
 
