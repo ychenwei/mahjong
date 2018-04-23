@@ -23,6 +23,8 @@ public class HandGenerator {
     List<List<TileType>> complete = genereate3Sets(grouped);
     Collections.shuffle(complete);
     List<List<TileType>> mayWait = genereate2Sets(grouped);
+    System.out.printf("complete" + complete.toString());
+    System.out.println("mayWait" + mayWait.toString());
     mayWait.addAll(generateRandom(grouped));
     for(int i = 1; i<4; i++){
       List<TileType> playerHand = randomHandFor1(nums[i-1], complete, mayWait);

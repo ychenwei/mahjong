@@ -44,6 +44,9 @@ public class Agent extends AbstractBot {
   @Override
   protected Action chooseCpgdAction(GameContextPlayerView contextView, Set<ActionType> actionTypes, List<Action> actions) throws InterruptedException {
     System.out.println("Agent in hand: " + getCurrentHand(contextView));
+    if (contextView.getGameResult() != null) {
+      System.out.println(contextView.getGameResult().getWinnerLocation());
+    }
     if(actions.size() ==1) return actions.get(0);
 
     if (actionTypes.contains(WIN))

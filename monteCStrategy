@@ -1,0 +1,50 @@
+Agent in hand: [ZI3, BING1, TIAO6, WAN8, TIAO6, BING8, WAN6, TIAO6, BING9, BING2, TIAO4, ZI6, BING4, WAN8]
+Action: SI TIAO
+Agent in hand: [WAN2, WAN8, BING8, BING6, TIAO5, BING7, TIAO8, ZI1, WAN4, BING6, WAN5, BING4, BING7, WAN1]
+Action: [DISCARD, [TIAO5]]
+Agent in hand: [ZI3, BING1, ZI0, TIAO6, WAN8, TIAO6, BING8, WAN6, TIAO6, BING9, BING2, ZI6, BING4, WAN8]
+Action: DONG_FENG
+Agent in hand: [WAN2, WAN8, BING8, BING6, BING7, TIAO8, ZI1, WAN4, BING6, WAN5, WAN5, BING4, BING7, WAN1]
+Action: [DISCARD, [TIAO8]]
+Agent in hand: [ZI3, BING1, TIAO9, TIAO6, WAN8, TIAO6, BING8, WAN6, TIAO6, BING9, BING2, ZI6, BING4, WAN8]
+Action: [DISCARD, [TIAO9]]
+Agent in hand: [WAN2, WAN8, BING8, BING6, BING7, BING1, ZI1, WAN4, BING6, WAN5, WAN5, BING4, BING7, WAN1]
+Action: SI WAN
+Agent in hand: [ZI3, BING1, TIAO6, WAN8, TIAO6, BING8, WAN6, TIAO6, BING9, BING2, ZI6, BING4, WAN8, BING5]
+Action: BA BING
+Agent in hand: [ZI3, BING1, TIAO6, WAN8, TIAO6, WAN6, TIAO6, BING9, BING2, ZI6, BING4, WAN8, BING5, WAN3]
+Action: [DISCARD, [WAN3]]
+Agent in hand: [WAN2, WAN8, BING8, BING6, BING7, BING1, ZI1, BING6, WAN5, WAN5, BING4, BING7, WAN1]
+Agent in hand: [WAN2, WAN8, BING6, BING1, ZI1, BING6, WAN5, WAN5, BING4, BING7, WAN1]
+Action: YI WAN
+Agent in hand: [ZI3, BING1, TIAO6, WAN8, TIAO6, WAN6, TIAO6, BING9, BING2, ZI6, BING4, WAN8, BING5]
+Agent in hand: [ZI3, BING1, TIAO6, TIAO6, TIAO6, BING9, BING2, ZI6, BING4, WAN8, BING5]
+Action: [DISCARD, [WAN8]]
+1	winner: 2	1	114	12	712	12	67698
+Agent in hand: [ZI3, ZI1, WAN9, BING2, BING1, TIAO8, BING2, ZI5, TIAO7, WAN2, ZI2, BING2, WAN6, BING7]
+complete[[SI TIAO, SI TIAO, SI TIAO, SI TIAO], [DONG_FENG, DONG_FENG, DONG_FENG], [ER WAN, ER WAN, ER WAN], [NAN, NAN, NAN], [WU BING, WU BING, WU BING, WU BING], [XI, XI, XI], [ZHONG, ZHONG, ZHONG, ZHONG], [ER TIAO, ER TIAO, ER TIAO, ER TIAO], [JIU TIAO, JIU TIAO, JIU TIAO, JIU TIAO], [SAN BING, SAN BING, SAN BING], [WU TIAO, WU TIAO, WU TIAO, WU TIAO], [YI TIAO, YI TIAO, YI TIAO, YI TIAO], [ER BING, SAN BING, SI BING], [SAN WAN, SAN WAN, SAN WAN, SAN WAN], [FA, FA, FA], [QI BING, QI BING, QI BING], [YI BING, YI BING, YI BING], [BA TIAO, BA TIAO, BA TIAO], [SI WAN, SI WAN, SI WAN, SI WAN], [LIU BING, LIU BING, LIU BING, LIU BING], [SI BING, SI BING, SI BING], [BEI, BEI, BEI], [WU WAN, WU WAN, WU WAN, WU WAN], [QI TIAO, QI TIAO, QI TIAO], [LIU TIAO, LIU TIAO, LIU TIAO, LIU TIAO], [BA BING, BA BING, BA BING, BA BING], [YI WAN, YI WAN, YI WAN, YI WAN], [BAI, BAI, BAI, BAI], [JIU WAN, JIU WAN, JIU WAN], [JIU BING, JIU BING, JIU BING, JIU BING], [BA WAN, BA WAN, BA WAN, BA WAN], [LIU WAN, LIU WAN, LIU WAN], [QI WAN, QI WAN, QI WAN, QI WAN], [SAN TIAO, SAN TIAO, SAN TIAO, SAN TIAO]]mayWait[]
+Apr 23, 2018 2:32:13 AM com.github.blovemaple.mj.game.MahjongGame lambda$playerChooseActionAsync$8
+SEVERE: java.util.concurrent.CompletionException: java.lang.IllegalArgumentException: mayWait is EMPTY!
+java.util.concurrent.CompletionException: java.lang.IllegalArgumentException: mayWait is EMPTY!
+	at java.base/java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:314)
+	at java.base/java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:319)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1702)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:299)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: java.lang.IllegalArgumentException: mayWait is EMPTY!
+	at AgentBot.HandGenerator.randomHandFor1(HandGenerator.java:41)
+	at AgentBot.HandGenerator.randomHandsFor3Players(HandGenerator.java:30)
+	at AgentBot.OnePlayerStrategy.discardOnePlayerStategy(OnePlayerStrategy.java:94)
+	at AgentBot.Agent.chooseCpgdAction(Agent.java:91)
+	at com.github.blovemaple.mj.local.AbstractBot.chooseCpgdActionWithTimer(AbstractBot.java:151)
+	at com.github.blovemaple.mj.local.AbstractBot.chooseAction0(AbstractBot.java:101)
+	at com.github.blovemaple.mj.local.AbstractBot.chooseAction(AbstractBot.java:71)
+	at com.github.blovemaple.mj.game.MahjongGame.lambda$playerChooseActionAsync$7(MahjongGame.java:236)
+	at com.github.blovemaple.mj.utils.LambdaUtils.lambda$rethrowSupplier$5(LambdaUtils.java:104)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1700)
+	... 6 more
+

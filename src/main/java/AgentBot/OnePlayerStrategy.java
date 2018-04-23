@@ -80,7 +80,7 @@ public class OnePlayerStrategy {
       return result;
     }
     TileType best = (TileType) discardChoices.toArray()[0];
-    if (round < 10) {
+    if (round < 8) {
       double maxGrade = -Double.MAX_VALUE;
       for (TileType discard : discardChoices) {
         Map<TileSuit, int[]> afterDiscard = inHandDiscard1(divided, discard);

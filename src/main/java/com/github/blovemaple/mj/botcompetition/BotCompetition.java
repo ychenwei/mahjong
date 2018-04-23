@@ -4,6 +4,7 @@ import com.github.blovemaple.mj.cli.CliRunner;
 import com.github.blovemaple.mj.game.GameResult;
 import com.github.blovemaple.mj.game.MahjongGame;
 import com.github.blovemaple.mj.local.AbstractBot;
+import com.github.blovemaple.mj.local.bazbot.BazBot;
 import com.github.blovemaple.mj.object.MahjongTable;
 import com.github.blovemaple.mj.object.Player;
 import com.github.blovemaple.mj.rule.GameStrategy;
@@ -14,7 +15,6 @@ import java.util.List;
 import java.util.logging.LogManager;
 
 import AgentBot.Agent;
-import AgentRandomBot.RandomAgent;
 
 import static com.github.blovemaple.mj.object.PlayerLocation.EAST;
 import static com.github.blovemaple.mj.object.PlayerLocation.NORTH;
@@ -26,7 +26,7 @@ import static com.github.blovemaple.mj.object.PlayerLocation.WEST;
  */
 public class BotCompetition {
 	public static void main(String[] args) {
-		new BotCompetition(Agent.class, RandomAgent.class).compete(1000);
+		new BotCompetition(Agent.class, BazBot.class).compete(1000);
 	}
 
 	private Class<? extends AbstractBot> botType1, botType2;

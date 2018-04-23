@@ -4,6 +4,7 @@ import com.github.blovemaple.mj.object.Tile;
 import com.github.blovemaple.mj.object.TileType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -36,9 +37,13 @@ public class MonteCarloSimulation {
     TileType maxTile = null;
     //todo:try the tile with highest UTC
     //choose the tile with max score to discard
+    Map<TileType, StateNode> discardCandis = new HashMap<>();
+    for (TileType candi: discardChoices) {
+      discardCandis.put(candi, new StateNode(null, candi, null));
+    }
     while (TimeUnit.NANOSECONDS.toSeconds(estimatedTime-startTime) < 10) {
       for (TileType tileType : discardChoices) {
-        StateNode root = new StateNode(null, tileType, null);
+        StateNode root = discardCandis.get(tileType);
         List<TileType> curtMyHand = new ArrayList<>(myHand);
         curtMyHand.remove(tileType);
         simuHands.put(4, curtMyHand);
