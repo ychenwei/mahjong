@@ -79,7 +79,7 @@ public class OnePlayerStrategy {
     Set<TileType> discardChoices = discardChoice(divided);
     if(discardChoices.size() == 1){
       Action result = tileToAction((TileType) discardChoices.toArray()[0]);
-      System.out.println("Action: " + result.toString() );
+//      System.out.println("Action: " + result.toString() );
       return result;
     }
     TileType best = (TileType) discardChoices.toArray()[0];
@@ -101,7 +101,7 @@ public class OnePlayerStrategy {
       best = MCS.chooseDiscardTile(discardChoices);
       System.out.println("*************************find tile to discard");
     }
-    System.out.println("Action: " + best.toString());
+//    System.out.println("Action: " + best.toString());
     return tileToAction(best);
   }
 

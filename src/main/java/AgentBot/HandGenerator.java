@@ -79,11 +79,18 @@ public class HandGenerator {
             }
           }
       } else {
-          if(complete.isEmpty()) throw new IllegalArgumentException("complete "
-                  + "is EMPTY!");
-          hand.addAll(complete.get(0));
-          complete.remove(0);
-          num -= 3;
+          if(!complete.isEmpty()) {
+            hand.addAll(complete.get(0));
+            complete.remove(0);
+            num -= 3;
+            continue;
+          }
+          if(!mayWait.isEmpty()){
+            List<TileType> toAdd = mayWait.get(0);
+            hand.addAll(toAdd);
+            mayWait.remove(0);
+            num -= toAdd.size();
+          }
         }
     }
     return hand;
@@ -107,22 +114,24 @@ public class HandGenerator {
   public void set3Helper(Map<TileSuit, int[]> grouped, List<List<TileType>>
           result, int count){
     for (Map.Entry<TileSuit, int[]> entry : grouped.entrySet()) {
+
       TileSuit suit = entry.getKey();
       int[] suitArray = entry.getValue();
       for (int i = 0; i < suitArray.length; i++) {
         List<TileType> set = new ArrayList<>();
 
-        //triplet or quaternate
+        //triplet only, cannot be a quaternate
         if (suitArray[i] >= 3) {
-          for (int j = 0; j < suitArray[i]; j++) {
+          for (int j = 0; j < 3; j++) {
             if (suit.equals(TileSuit.ZI)) {
               set.add(TileType.of(suit, i));
             } else {
               set.add(TileType.of(suit, i + 1));
             }
+            suitArray[i] --;
           }
-          suitArray[i] = 0;
-          result.add(set);
+          result.add(new ArrayList<>(set));
+          grouped.put(suit, suitArray);
           count++;
           continue;
         }
@@ -135,7 +144,8 @@ public class HandGenerator {
             set.add(TileType.of(suit, i + j + 1));
             suitArray[i + j]--;
           }
-          result.add(set);
+          result.add(new ArrayList<>(set));
+          grouped.put(suit,suitArray);
           count++;
         }
         if (count >= 12) break; // Only 12 sets are needed
