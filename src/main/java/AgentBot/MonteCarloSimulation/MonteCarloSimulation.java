@@ -105,9 +105,6 @@ public class MonteCarloSimulation {
   private boolean isWin(TileType newTile, List<TileType> hand) {
     List<TileType> newHand = new ArrayList<>(hand);
     newHand.add(newTile);
-    for (TileType t:newHand) {
-      System.out.print(t.toString());
-    }
     return new WinJudge().isWin(agentStrat.divideTypeBySuit(newHand));
   }
 
