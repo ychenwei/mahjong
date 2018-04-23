@@ -13,7 +13,8 @@ public class HandFactoryTest {
 
   @Test
   public void testGetCombination(){
-    int[] hand = {0,3,3,3,0,0,0,0,0};
+    int[] hand = {0,1,1,2,1,1,0,0,3};
+//    int[] hand = {1,1,1,0,3,0,0,0,3};
     System.out.println(factory.getCombination
             (hand).toString());
   }
