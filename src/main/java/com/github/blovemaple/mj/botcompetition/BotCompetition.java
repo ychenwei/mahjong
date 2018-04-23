@@ -45,16 +45,22 @@ public class BotCompetition {
 			LogManager.getLogManager()
 					.readConfiguration(CliRunner.class.getResource("/logging_botcompetition.properties").openStream());
 
-			AbstractBot bot11 = botType1.getConstructor().newInstance();
-			AbstractBot bot12 = botType1.getConstructor().newInstance();
-			AbstractBot bot21 = botType2.getConstructor().newInstance();
-			AbstractBot bot22 = botType2.getConstructor().newInstance();
+//			AbstractBot bot11 = botType1.getConstructor().newInstance();
+//			AbstractBot bot12 = botType1.getConstructor().newInstance();
+
+
+//			AbstractBot bot21 = botType2.getConstructor().newInstance();
+//			AbstractBot bot22 = botType2.getConstructor().newInstance();
 
 			for (int gameIndex = 1; gameCount >= 0 && gameIndex <= gameCount; gameIndex++) {
-				bot11.resetCostStat();
-				bot12.resetCostStat();
-				bot21.resetCostStat();
-				bot22.resetCostStat();
+				AbstractBot bot11 = new Agent();
+				AbstractBot bot12 = new Agent();
+//				bot11.resetCostStat();
+//				bot12.resetCostStat();
+				AbstractBot bot21 = new BazBot();
+				AbstractBot bot22 = new BazBot();
+//				bot21.resetCostStat();
+//				bot22.resetCostStat();
 
 				long startTime = System.nanoTime();
 				GameResult result;

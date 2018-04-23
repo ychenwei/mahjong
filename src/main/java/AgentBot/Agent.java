@@ -29,7 +29,9 @@ import static com.github.blovemaple.mj.action.standard.StandardActionType.ZHIGAN
  */
 public class Agent extends AbstractBot {
   private PlayerLocation playerLocation;
-  private OnePlayerStrategy strategy = OnePlayerStrategy.getInstance();
+//  private OnePlayerStrategy strategy = OnePlayerStrategy.getInstance();
+  private OnePlayerStrategy strategy = new OnePlayerStrategy();
+  private int round = 0;
 
   public Agent(String name) {
     super(name);
@@ -43,10 +45,9 @@ public class Agent extends AbstractBot {
 
   @Override
   protected Action chooseCpgdAction(GameContextPlayerView contextView, Set<ActionType> actionTypes, List<Action> actions) throws InterruptedException {
+    round++;
+    System.out.println(round);
     System.out.println("Agent in hand: " + getCurrentHand(contextView));
-    if (contextView.getGameResult() != null) {
-      System.out.println(contextView.getGameResult().getWinnerLocation());
-    }
     if(actions.size() ==1) return actions.get(0);
 
     if (actionTypes.contains(WIN))
@@ -87,6 +88,7 @@ public class Agent extends AbstractBot {
       }
       sizesForPlayer[index++] = view.getValue().getAliveTileSize();
     }
+    strategy.setRound(round);
     strategy.setAliveTileSizes(sizesForPlayer);
     return strategy.discardOnePlayerStategy();
   }

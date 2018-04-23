@@ -35,14 +35,19 @@ public class OnePlayerStrategy {
   private double need = 0; //add need * probability of tile needed to the points
   private int single =0; //which should be negative as punishment
 
-  private OnePlayerStrategy(){
+  public OnePlayerStrategy(){
     this.tilesInHand = new ArrayList<>();
     this.actions = new ArrayList<>();
     this.unknownTiles = new ArrayList<>();
   }
 
-  public static OnePlayerStrategy getInstance() {
-    return s;
+//  public static OnePlayerStrategy getInstance() {
+//    return s;
+//  }
+
+
+  public void setRound(int round) {
+    this.round = round;
   }
 
   public void setAliveTileSizes(int[] aliveTileSizes) {
@@ -71,7 +76,6 @@ public class OnePlayerStrategy {
    * @return
    */
   public Action discardOnePlayerStategy(){
-    round++;
     Map<TileSuit, int[]> divided = (divideBySuit(tilesInHand));
     Set<TileType> discardChoices = discardChoice(divided);
     if(discardChoices.size() == 1){
