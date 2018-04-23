@@ -5,6 +5,7 @@ import com.github.blovemaple.mj.object.TileType;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,33 +16,58 @@ public class HandGenerator {
 
   public HandGenerator() {}
 
-  //Random generate n combinations with total 36 sets,
-  // player 1: 0-11, player 2: 12-23, player 3:24-35
-  //steps to waiting: 0 or 1
-  public List<List<List<TileType>>> randomHandsFor3Players(Map<TileSuit,
-          int[]> grouped, int num, int stepsToWaiting){
-    List<List<List<TileType>>> result = new ArrayList<>();
+  //For key 1, 2, 3 represent player 1, 2, 3
+  public Map<Integer, List<TileType>> randomHandsFor3Players(Map<TileSuit,
+          int[]> grouped, int num0, int num1, int num2){
+    int[] nums = {num0, num1, num2};
+    Map<Integer, List<TileType>> map = new HashMap<>();
     List<List<TileType>> complete = genereate3Sets(grouped);
-    List<List<TileType>> mayWait = new ArrayList<>();
-    if(stepsToWaiting == 0){
-      mayWait = genereate2Sets(grouped);
-    }else if(stepsToWaiting == 1){
-      mayWait = genereate2Sets(grouped);
+    Collections.shuffle(complete);
+    List<List<TileType>> mayWait = genereate2Sets(grouped);
+    mayWait.addAll(generateRandom(grouped));
+    for(int i = 1; i<4; i++){
+      List<TileType> playerHand = randomHandFor1(nums[i-1], complete, mayWait);
+      map.put(i,playerHand);
     }
-
-
-    for(int i = 0; i< num; i++){
-      Collections.shuffle(complete);
-      Collections.shuffle(mayWait);
-      List<List<TileType>> comb = new ArrayList<>(complete);
-      comb.add(11,mayWait.get(0));
-      comb.add(23, mayWait.get(1));
-      comb.add(mayWait.get(2));
-      result.add(comb);
-    }
-    return result;
+    return map;
   }
 
+  public List<TileType> randomHandFor1(int num, List<List<TileType>>
+          complete, List<List<TileType>> mayWait){
+    List<TileType> hand = new ArrayList<>();
+    while (num > 0){
+        if(num == 1){
+          if(mayWait.isEmpty()) throw new IllegalArgumentException("mayWait "
+                  + "is EMPTY!");
+          for(int i = 0; i< mayWait.size();i++) {
+            if (mayWait.get(i).size() >= 1) {
+              hand.add(mayWait.get(i).get(0));
+              mayWait.get(i).remove(0);
+              num = 0;
+              break;
+            }
+          }
+        } else if(num == 2){
+          if(mayWait.isEmpty()) throw new IllegalArgumentException("mayWait "
+                  + "is EMPTY!");
+          for(int i = 0; i< mayWait.size();i++){
+            if(mayWait.get(i).size() == 2){
+              hand.addAll(mayWait.get(i));
+              mayWait.remove(i);
+              num = 0;
+              break;
+            }
+          }
+      } else {
+          if(complete.isEmpty()) throw new IllegalArgumentException("complete "
+                  + "is EMPTY!");
+          hand.addAll(complete.get(0));
+          complete.remove(0);
+          num -= 3;
+        }
+    }
+    return hand;
+  }
 
   //Generate 12 complete sets. grouped will be updated.
   public List<List<TileType>> genereate3Sets(Map<TileSuit, int[]> grouped) {
@@ -94,11 +120,20 @@ public class HandGenerator {
     }
   }
 
-
   //Generate 3 incomplete sets. grouped will be updated.
   public List<List<TileType>> genereate2Sets(Map<TileSuit, int[]> grouped) {
     List<List<TileType>> result = new ArrayList<>();
     int count = 0;
+    int loop = 0;
+    while(count < 4 && loop <10){
+      set2Helper(grouped, result, count);
+      loop ++;
+    }
+    return result;
+  }
+
+  private void set2Helper(Map<TileSuit, int[]> grouped, List<List<TileType>>
+          result, int count){
     for (Map.Entry<TileSuit, int[]> entry : grouped.entrySet()) {
       TileSuit suit = entry.getKey();
       int[] suitArray = entry.getValue();
@@ -132,7 +167,6 @@ public class HandGenerator {
         }
       }
     }
-    return result;
   }
 
 
