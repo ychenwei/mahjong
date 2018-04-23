@@ -17,11 +17,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.github.blovemaple.mj.action.standard.StandardActionType.ANGANG;
-import static com.github.blovemaple.mj.action.standard.StandardActionType.BUGANG;
 import static com.github.blovemaple.mj.action.standard.StandardActionType.BUHUA;
 import static com.github.blovemaple.mj.action.standard.StandardActionType.WIN;
-import static com.github.blovemaple.mj.action.standard.StandardActionType.ZHIGANG;
 
 /**
  * For CS5100 Final Project.
@@ -61,14 +58,14 @@ public class Agent extends AbstractBot {
       }
     }
 
-    if(actionTypes.contains(ZHIGANG))
-      return new Action(ZHIGANG);
-
-    if(actionTypes.contains(BUGANG))
-      return new Action(BUGANG);
-
-    if(actionTypes.contains(ANGANG))
-      return new Action(ANGANG);
+//    if(actionTypes.contains(ZHIGANG))
+//      return new Action(ZHIGANG);
+//
+//    if(actionTypes.contains(BUGANG))
+//      return new Action(BUGANG);
+//
+//    if(actionTypes.contains(ANGANG))
+//      return new Action(ANGANG);
 
     List<Action> notDiscard = actions.stream().filter(action -> {
               if(action == null || action.getType()== null || action.getType()

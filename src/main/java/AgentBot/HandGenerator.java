@@ -93,7 +93,7 @@ public class HandGenerator {
   // grouped will be updated.
   public List<List<TileType>> genereate3Sets(Map<TileSuit, int[]> grouped,
                                              int size) {
-    int num = size % (3 * 3);
+    int num = size / 3;
     List<List<TileType>> result = new ArrayList<>();
     int count = 0;
     int loop = 0;

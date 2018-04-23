@@ -83,7 +83,7 @@ public class OnePlayerStrategy {
       return result;
     }
     TileType best = (TileType) discardChoices.toArray()[0];
-    if (round < 8) {
+    if (round < 6) {
       double maxGrade = -Double.MAX_VALUE;
       for (TileType discard : discardChoices) {
         Map<TileSuit, int[]> afterDiscard = inHandDiscard1(divided, discard);
@@ -96,8 +96,10 @@ public class OnePlayerStrategy {
     } else {
       Map<Integer, List<TileType>> plyerHands = new HandGenerator().randomHandsFor3Players(divideBySuit(unknownTiles), aliveTileSizes);
       List<TileType> leftTileWall = getSimTileWall(plyerHands);
+      System.out.println("*************************finish build tile wall");
       MonteCarloSimulation MCS = new MonteCarloSimulation(leftTileWall, tilesInHand, plyerHands);
       best = MCS.chooseDiscardTile(discardChoices);
+      System.out.println("*************************find tile to discard");
     }
     System.out.println("Action: " + best.toString());
     return tileToAction(best);
