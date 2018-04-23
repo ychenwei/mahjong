@@ -62,10 +62,13 @@ public class MonteCarloSimulation {
     StateNode nextNode = null;
     while (true) {
       for (int i = 1; i <= 4; i++) {
+        if (leftTileWall.size() == 0) {
+          return root.getReward();
+        }
         TileType next = leftTileWall.remove(new Random().nextInt(leftTileWall.size()));
         nextNode = (i == 4)? myTurn(i, curtNode, next, curtMyHand):otherTurn(i, curtNode, next, curtMyHand);
         if (nextNode == null) {
-          return curtNode.getReward();
+          return root.getReward();
         }
         curtNode = nextNode;
       }
@@ -114,7 +117,7 @@ public class MonteCarloSimulation {
       return null;
     }
     curtHand.add(newTile);
-    Set<TileType> discardCandis = agentStrat.discardChoice(agentStrat.divideBySuit(curtHand));
+    Set<TileType> discardCandis = agentStrat.discardChoice(agentStrat.divideTypeBySuit(curtHand));
     int rd = new Random().nextInt(discardCandis.size());
     int i = 0;
     for (TileType toDiscard: discardCandis) {

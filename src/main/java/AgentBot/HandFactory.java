@@ -174,7 +174,7 @@ public class HandFactory {
     map.get(COMPLETE).add(fourNum);
     map.get(COMPLETE).add(completeNum);
     map.get(TUPLE).add(tupleNum);
-    System.out.println(map);
+//    System.out.println(map);
     return map;
   }
 

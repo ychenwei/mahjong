@@ -104,7 +104,7 @@ public class OnePlayerStrategy {
     List<TileType> leftTileWall = new ArrayList<>();
     int[][] numRank = new int[3][9];
     int[] nonNumRank = new int[7];
-    buildTable(numRank, nonNumRank);
+    buildTable(numRank, nonNumRank, leftTileWall);
     for (List<TileType> hand: plyerHands.values()) {
       for (TileType tile: hand) {
         if (tile.isNumberRank()) {
@@ -134,9 +134,13 @@ public class OnePlayerStrategy {
    * @param numRank
    * @param nonNumRank
    */
-  private void buildTable(int[][] numRank, int[] nonNumRank) {
+  private void buildTable(int[][] numRank, int[] nonNumRank, List<TileType> leftTileWall) {
     for (Tile tile: unknownTiles) {
       TileType tileType = tile.type();
+      if (tileType.suit().equals(TileSuit.HUA)) {
+        leftTileWall.add(tileType);
+        continue;
+      }
       if (tileType.isNumberRank()) {
         int number = tileType.number()-1;
         int rank = checkRank(tileType);

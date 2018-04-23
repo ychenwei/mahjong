@@ -50,7 +50,7 @@ public class HandGeneratorTest {
 ////    System.out.println(generator.genereate2Sets(map).toString());
 //    System.out.println(generator.generateRandom(map));
 
-    System.out.println(generator.randomHandsFor3Players(map,13, 10, 1));
+    System.out.println(generator.randomHandsFor3Players(map,new int[]{13, 10, 1}));
   }
 
   private int sum(int[] array){
