@@ -29,7 +29,7 @@ import static com.github.blovemaple.mj.action.standard.StandardActionType.ZHIGAN
  */
 public class Agent extends AbstractBot {
   private PlayerLocation playerLocation;
-  private OnePlayerStrategy strategy = OnePlayerStrategy.getInstance();
+  private OnePlayerStrategy strategy = new OnePlayerStrategy();
 
   public Agent(String name) {
     super(name);

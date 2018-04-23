@@ -13,6 +13,10 @@ import java.util.Map;
  * Generate a hand according to unknown tiles
  */
 public class HandGenerator {
+  private Map<Map<TileSuit,int[]>,
+          Map<String, List<List<TileType>>>> cache = new HashMap<>();
+  private static String COMPLETE = "COMPLETE";
+  private static String MAYWAIT = "MAYWAIT";
 
   public HandGenerator() {}
 
@@ -20,10 +24,25 @@ public class HandGenerator {
   public Map<Integer, List<TileType>> randomHandsFor3Players(Map<TileSuit,
           int[]> grouped, int[] nums){
     Map<Integer, List<TileType>> map = new HashMap<>();
-    List<List<TileType>> complete = genereate3Sets(grouped);
-    Collections.shuffle(complete);
-    List<List<TileType>> mayWait = genereate2Sets(grouped);
-    mayWait.addAll(generateRandom(grouped));
+    int sizes = nums[0] + nums[1] + nums[2];
+    List<List<TileType>> complete;
+    List<List<TileType>> mayWait;
+    if(cache.containsKey(grouped)){
+      Map<String, List<List<TileType>>> cacheResult = cache.get(grouped);
+      complete = cacheResult.get(COMPLETE);
+      Collections.shuffle(complete);
+      mayWait = cacheResult.get(MAYWAIT);
+      Collections.shuffle(mayWait);
+    } else{
+      complete = genereate3Sets(grouped,sizes);
+      Collections.shuffle(complete);
+      mayWait = genereate2Sets(grouped);
+      mayWait.addAll(generateRandom(grouped));
+      Map<String, List<List<TileType>>> temp = new HashMap<>();
+      temp.put(COMPLETE, complete);
+      temp.put(MAYWAIT, mayWait);
+      cache.put(grouped, temp);
+    }
     for(int i = 1; i<4; i++){
       List<TileType> playerHand = randomHandFor1(nums[i-1], complete, mayWait);
       map.put(i,playerHand);
@@ -68,12 +87,15 @@ public class HandGenerator {
     return hand;
   }
 
-  //Generate 12 complete sets. grouped will be updated.
-  public List<List<TileType>> genereate3Sets(Map<TileSuit, int[]> grouped) {
+  //Generate complete sets according to other players' hand size.
+  // grouped will be updated.
+  public List<List<TileType>> genereate3Sets(Map<TileSuit, int[]> grouped,
+                                             int size) {
+    int num = size % (3 * 3);
     List<List<TileType>> result = new ArrayList<>();
     int count = 0;
     int loop = 0;
-    while(count < 12 && loop < 10){
+    while(count < num && loop < 10){
       set3Helper(grouped, result, count);
       loop ++;
     }
@@ -81,7 +103,7 @@ public class HandGenerator {
   }
 
   public void set3Helper(Map<TileSuit, int[]> grouped, List<List<TileType>>
-          result, int count ){
+          result, int count){
     for (Map.Entry<TileSuit, int[]> entry : grouped.entrySet()) {
       TileSuit suit = entry.getKey();
       int[] suitArray = entry.getValue();
@@ -124,7 +146,7 @@ public class HandGenerator {
     List<List<TileType>> result = new ArrayList<>();
     int count = 0;
     int loop = 0;
-    while(count < 4 && loop <10){
+    while(count < 6 && loop <10){
       set2Helper(grouped, result, count);
       loop ++;
     }

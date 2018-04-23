@@ -21,7 +21,7 @@ public class MonteCarloSimulation {
 
   public MonteCarloSimulation(List<TileType> leftTileWall, List<Tile> originHand, Map<Integer, List<TileType>> simuHands) {
     this.leftTileWall = leftTileWall;
-    this.agentStrat = OnePlayerStrategy.getInstance();
+    this.agentStrat = new OnePlayerStrategy();
     this.myHand = new ArrayList<>();
     for (Tile tile: originHand) {
       myHand.add(tile.type());
