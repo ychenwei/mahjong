@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import AgentBot.HandGenerator;
@@ -46,10 +45,12 @@ public class HandGeneratorTest {
     map.put(TileSuit.TIAO, stickSuit);
     map.put(TileSuit.BING, ballSuit);
     map.put(TileSuit.ZI, windsAndDragons);
-    List<List<TileType>> set3 = generator.genereate3Sets(map);
-    System.out.println(set3.size() + ":" + set3.toString());
-//    System.out.println(generator.genereate2Sets(map).toString());
-    System.out.println(generator.generateRandom(map));
+//    List<List<TileType>> set3 = generator.genereate3Sets(map);
+//    System.out.println(set3.size() + ":" + set3.toString());
+////    System.out.println(generator.genereate2Sets(map).toString());
+//    System.out.println(generator.generateRandom(map));
+
+    System.out.println(generator.randomHandsFor3Players(map,new int[]{13, 10, 1}));
   }
 
   private int sum(int[] array){
