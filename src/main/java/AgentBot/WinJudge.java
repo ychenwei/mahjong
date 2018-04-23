@@ -30,7 +30,8 @@ public class WinJudge {
         combinations = new ArrayList<>(factory.combinationForWindDragon(suit));
       }else {
         System.out.println("enter not zi");
-        combinations = new ArrayList(factory.getCombination(suit));
+        combinations = new ArrayList<>(factory.getCombination(suit));
+        System.out.println("leave not zi");
       }
       System.out.println("enter gradeHelper");
       Map<String, List<Integer>> helper = factory.gradeHelper(combinations
