@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * Deal with one suit combinations.
  */
 public class HandFactory {
-  private Map<int[], Set<List<String>>> combinationCache;
+//  private Map<int[], Set<List<String>>> combinationCache;
   private static HandFactory handFactory = new HandFactory();
   public final static String COMPLETE = "complete";
   public final static String TUPLE = "tuple";
@@ -26,12 +26,12 @@ public class HandFactory {
   }
 
   private HandFactory() {
-    this.combinationCache = new HashMap<>(); //todo: may load from some text file.
+//    this.combinationCache = new HashMap<>(); //todo: may load from some text file.
   }
 
   public Set<List<String>> getCombination(int[] inHand) {
-    if (combinationCache.containsKey(inHand)) return combinationCache.get
-            (inHand);
+//    if (combinationCache.containsKey(inHand)) return combinationCache.get
+//            (inHand);
     Set<List<String>> result = new HashSet<>();
     for (int i = 0; i < inHand.length; i++) {
       if (inHand[i] < 1) continue;
@@ -84,7 +84,7 @@ public class HandFactory {
     Set<List<String>> minSets = result.stream().filter(set -> set.size() == min)
             .collect(Collectors
                     .toSet());
-    combinationCache.put(inHand, minSets);
+//    combinationCache.put(inHand, minSets);
     return minSets;
   }
 

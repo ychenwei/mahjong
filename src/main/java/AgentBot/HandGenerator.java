@@ -43,8 +43,8 @@ public class HandGenerator {
       temp.put(MAYWAIT, mayWait);
       cache.put(grouped, temp);
     }
-    System.out.println("complete" + complete.toString());
-    System.out.println("mayWait" + mayWait.toString());
+//    System.out.println("complete" + complete.toString());
+//    System.out.println("mayWait" + mayWait.toString());
     for(int i = 1; i<4; i++){
       List<TileType> playerHand = randomHandFor1(nums[i-1], complete, mayWait);
       map.put(i,playerHand);

@@ -79,7 +79,7 @@ public class OnePlayerStrategy {
     Set<TileType> discardChoices = discardChoice(divided);
     if(discardChoices.size() == 1){
       Action result = tileToAction((TileType) discardChoices.toArray()[0]);
-//      System.out.println("Action: " + result.toString() );
+      System.out.println("Action: " + result.toString() );
       return result;
     }
     TileType best = (TileType) discardChoices.toArray()[0];
@@ -96,12 +96,12 @@ public class OnePlayerStrategy {
     } else {
       Map<Integer, List<TileType>> plyerHands = new HandGenerator().randomHandsFor3Players(divideBySuit(unknownTiles), aliveTileSizes);
       List<TileType> leftTileWall = getSimTileWall(plyerHands);
-      System.out.println("*************************finish build tile wall");
+//      System.out.println("*************************finish build tile wall");
       MonteCarloSimulation MCS = new MonteCarloSimulation(leftTileWall, tilesInHand, plyerHands);
       best = MCS.chooseDiscardTile(discardChoices);
-      System.out.println("*************************find tile to discard");
+//      System.out.println("*************************find tile to discard");
     }
-//    System.out.println("Action: " + best.toString());
+    System.out.println("Action: " + best.toString());
     return tileToAction(best);
   }
 

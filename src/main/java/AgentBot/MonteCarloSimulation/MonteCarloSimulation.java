@@ -61,12 +61,12 @@ public class MonteCarloSimulation {
     if (checkMeDianPao(root, discardTile)) {
       return root.getReward();
     }
-    long startTime = System.nanoTime();
+
     StateNode curtNode = root;
     StateNode nextNode = null;
     while (true) {
       for (int i = 1; i <= 4; i++) {
-        if (leftTileWall.size() == 0 || TimeUnit.NANOSECONDS.toSeconds(System.nanoTime()-startTime) > 10) {
+        if (leftTileWall.size() == 0) {
           return root.getReward();
         }
         TileType next = leftTileWall.remove(new Random().nextInt(leftTileWall.size()));
