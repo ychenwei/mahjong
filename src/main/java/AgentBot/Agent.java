@@ -5,6 +5,7 @@ import com.github.blovemaple.mj.action.ActionType;
 import com.github.blovemaple.mj.game.GameContextPlayerView;
 import com.github.blovemaple.mj.local.AbstractBot;
 import com.github.blovemaple.mj.object.PlayerInfo;
+import com.github.blovemaple.mj.object.PlayerInfoPlayerView;
 import com.github.blovemaple.mj.object.PlayerLocation;
 import com.github.blovemaple.mj.object.Tile;
 import com.github.blovemaple.mj.object.TileGroupPlayerView;
@@ -12,6 +13,7 @@ import com.github.blovemaple.mj.object.TileGroupPlayerView;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -74,6 +76,15 @@ public class Agent extends AbstractBot {
     strategy.setTiles(new ArrayList<>(getCurrentHand(contextView)),actions,getUnknownTiles
             (contextView.getMyInfo(),contextView));
 //    System.out.println("Actions: " + actions.toString());
+    int[] sizesForPlayer = new int[3];
+    int index = 0;
+    for (Map.Entry<PlayerLocation, PlayerInfoPlayerView> view: contextView.getTableView().getPlayerInfoView().entrySet()) {
+      if (view.getKey().equals(contextView.getMyLocation())) {
+        continue;
+      }
+      sizesForPlayer[index++] = view.getValue().getAliveTileSize();
+    }
+    strategy.setAliveTileSizes(sizesForPlayer);
     return strategy.discardOnePlayerStategy();
   }
 

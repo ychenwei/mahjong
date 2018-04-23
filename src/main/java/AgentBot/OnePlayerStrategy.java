@@ -25,7 +25,7 @@ public class OnePlayerStrategy {
   private HandFactory factory = HandFactory.getHandFactory();
   private static OnePlayerStrategy s = new OnePlayerStrategy();
   private int round = 0;
-
+  private int[] aliveTileSizes;
 
   //Parameter grading each set
   private int tripletOrSequence = 0;
@@ -43,6 +43,10 @@ public class OnePlayerStrategy {
 
   public static OnePlayerStrategy getInstance() {
     return s;
+  }
+
+  public void setAliveTileSizes(int[] aliveTileSizes) {
+    this.aliveTileSizes = aliveTileSizes;
   }
 
   public void setTiles(List<Tile> tilesInHand, List<Action> actions,
@@ -87,7 +91,7 @@ public class OnePlayerStrategy {
         if (grade > maxGrade) best = discard;
       }
     } else {
-      Map<Integer, List<TileType>> plyerHands = new HandGenerator().randomHandsFor3Players();
+      Map<Integer, List<TileType>> plyerHands = new HandGenerator().randomHandsFor3Players(divideBySuit(unknownTiles), aliveTileSizes);
       List<TileType> leftTileWall = getSimTileWall(plyerHands);
       MonteCarloSimulation MCS = new MonteCarloSimulation(leftTileWall, tilesInHand, plyerHands);
       best = MCS.chooseDiscardTile(discardChoices);

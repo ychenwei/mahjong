@@ -18,8 +18,7 @@ public class HandGenerator {
 
   //For key 1, 2, 3 represent player 1, 2, 3
   public Map<Integer, List<TileType>> randomHandsFor3Players(Map<TileSuit,
-          int[]> grouped, int num0, int num1, int num2){
-    int[] nums = {num0, num1, num2};
+          int[]> grouped, int[] nums){
     Map<Integer, List<TileType>> map = new HashMap<>();
     List<List<TileType>> complete = genereate3Sets(grouped);
     Collections.shuffle(complete);
