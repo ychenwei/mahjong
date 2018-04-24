@@ -37,16 +37,16 @@ public class RandomAgent extends AbstractBot {
       }
     }
 
-    if(actionTypes.contains(ZHIGANG))
+    if (actionTypes.contains(ZHIGANG))
       return new Action(ZHIGANG);
 
-    if(actionTypes.contains(BUGANG))
+    if (actionTypes.contains(BUGANG))
       return new Action(BUGANG);
 
-    if(actionTypes.contains(ANGANG))
+    if (actionTypes.contains(ANGANG))
       return new Action(ANGANG);
 
     int numActions = actions.size();
-    return actions.get((int)Math.random()*numActions);
+    return actions.get((int) Math.random() * numActions);
   }
 }

@@ -11,30 +11,33 @@ import java.util.Map;
 
 /**
  * Generate a hand according to unknown tiles
+ * For CS5100 Final Project
+ * @author Luyao Wang, Chenwei Yin
  */
 public class HandGenerator {
-  private Map<Map<TileSuit,int[]>,
-          Map<String, List<List<TileType>>>> cache = new HashMap<>();
   private static String COMPLETE = "COMPLETE";
   private static String MAYWAIT = "MAYWAIT";
+  private Map<Map<TileSuit, int[]>,
+          Map<String, List<List<TileType>>>> cache = new HashMap<>();
 
-  public HandGenerator() {}
+  public HandGenerator() {
+  }
 
   //For key 1, 2, 3 represent player 1, 2, 3
   public Map<Integer, List<TileType>> randomHandsFor3Players(Map<TileSuit,
-          int[]> grouped, int[] nums){
+          int[]> grouped, int[] nums) {
     Map<Integer, List<TileType>> map = new HashMap<>();
     int sizes = nums[0] + nums[1] + nums[2];
     List<List<TileType>> complete;
     List<List<TileType>> mayWait;
-    if(cache.containsKey(grouped)){
+    if (cache.containsKey(grouped)) {
       Map<String, List<List<TileType>>> cacheResult = cache.get(grouped);
       complete = cacheResult.get(COMPLETE);
       Collections.shuffle(complete);
       mayWait = cacheResult.get(MAYWAIT);
       Collections.shuffle(mayWait);
-    } else{
-      complete = genereate3Sets(grouped,sizes);
+    } else {
+      complete = genereate3Sets(grouped, sizes);
       Collections.shuffle(complete);
       mayWait = genereate2Sets(grouped);
       mayWait.addAll(generateRandom(grouped));
@@ -45,53 +48,53 @@ public class HandGenerator {
     }
 //    System.out.println("complete" + complete.toString());
 //    System.out.println("mayWait" + mayWait.toString());
-    for(int i = 1; i<4; i++){
-      List<TileType> playerHand = randomHandFor1(nums[i-1], complete, mayWait);
-      map.put(i,playerHand);
+    for (int i = 1; i < 4; i++) {
+      List<TileType> playerHand = randomHandFor1(nums[i - 1], complete, mayWait);
+      map.put(i, playerHand);
     }
     return map;
   }
 
   public List<TileType> randomHandFor1(int num, List<List<TileType>>
-          complete, List<List<TileType>> mayWait){
+          complete, List<List<TileType>> mayWait) {
     List<TileType> hand = new ArrayList<>();
-    while (num > 0){
-        if(num == 1){
-          if(mayWait.isEmpty()) throw new IllegalArgumentException("mayWait "
-                  + "is EMPTY!");
-          for(int i = 0; i< mayWait.size();i++) {
-            if (mayWait.get(i).size() >= 1) {
-              hand.add(mayWait.get(i).get(0));
-              mayWait.get(i).remove(0);
-              num = 0;
-              break;
-            }
-          }
-        } else if(num == 2){
-          if(mayWait.isEmpty()) throw new IllegalArgumentException("mayWait "
-                  + "is EMPTY!");
-          for(int i = 0; i< mayWait.size();i++){
-            if(mayWait.get(i).size() == 2){
-              hand.addAll(mayWait.get(i));
-              mayWait.remove(i);
-              num = 0;
-              break;
-            }
-          }
-      } else {
-          if(!complete.isEmpty()) {
-            hand.addAll(complete.get(0));
-            complete.remove(0);
-            num -= 3;
-            continue;
-          }
-          if(!mayWait.isEmpty()){
-            List<TileType> toAdd = mayWait.get(0);
-            hand.addAll(toAdd);
-            mayWait.remove(0);
-            num -= toAdd.size();
+    while (num > 0) {
+      if (num == 1) {
+        if (mayWait.isEmpty()) throw new IllegalArgumentException("mayWait "
+                + "is EMPTY!");
+        for (int i = 0; i < mayWait.size(); i++) {
+          if (mayWait.get(i).size() >= 1) {
+            hand.add(mayWait.get(i).get(0));
+            mayWait.get(i).remove(0);
+            num = 0;
+            break;
           }
         }
+      } else if (num == 2) {
+        if (mayWait.isEmpty()) throw new IllegalArgumentException("mayWait "
+                + "is EMPTY!");
+        for (int i = 0; i < mayWait.size(); i++) {
+          if (mayWait.get(i).size() == 2) {
+            hand.addAll(mayWait.get(i));
+            mayWait.remove(i);
+            num = 0;
+            break;
+          }
+        }
+      } else {
+        if (!complete.isEmpty()) {
+          hand.addAll(complete.get(0));
+          complete.remove(0);
+          num -= 3;
+          continue;
+        }
+        if (!mayWait.isEmpty()) {
+          List<TileType> toAdd = mayWait.get(0);
+          hand.addAll(toAdd);
+          mayWait.remove(0);
+          num -= toAdd.size();
+        }
+      }
     }
     return hand;
   }
@@ -104,15 +107,15 @@ public class HandGenerator {
     List<List<TileType>> result = new ArrayList<>();
     int count = 0;
     int loop = 0;
-    while(count < num && loop < 10){
+    while (count < num && loop < 10) {
       set3Helper(grouped, result, count);
-      loop ++;
+      loop++;
     }
     return result;
   }
 
   public void set3Helper(Map<TileSuit, int[]> grouped, List<List<TileType>>
-          result, int count){
+          result, int count) {
     for (Map.Entry<TileSuit, int[]> entry : grouped.entrySet()) {
 
       TileSuit suit = entry.getKey();
@@ -128,7 +131,7 @@ public class HandGenerator {
             } else {
               set.add(TileType.of(suit, i + 1));
             }
-            suitArray[i] --;
+            suitArray[i]--;
           }
           result.add(new ArrayList<>(set));
           grouped.put(suit, suitArray);
@@ -145,7 +148,7 @@ public class HandGenerator {
             suitArray[i + j]--;
           }
           result.add(new ArrayList<>(set));
-          grouped.put(suit,suitArray);
+          grouped.put(suit, suitArray);
           count++;
         }
         if (count >= 12) break; // Only 12 sets are needed
@@ -158,15 +161,15 @@ public class HandGenerator {
     List<List<TileType>> result = new ArrayList<>();
     int count = 0;
     int loop = 0;
-    while(count < 6 && loop <10){
+    while (count < 6 && loop < 10) {
       set2Helper(grouped, result, count);
-      loop ++;
+      loop++;
     }
     return result;
   }
 
   private void set2Helper(Map<TileSuit, int[]> grouped, List<List<TileType>>
-          result, int count){
+          result, int count) {
     for (Map.Entry<TileSuit, int[]> entry : grouped.entrySet()) {
       TileSuit suit = entry.getKey();
       int[] suitArray = entry.getValue();

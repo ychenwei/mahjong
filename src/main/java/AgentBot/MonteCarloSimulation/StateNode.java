@@ -2,6 +2,11 @@ package AgentBot.MonteCarloSimulation;
 
 import com.github.blovemaple.mj.object.TileType;
 
+/**
+ * For CS5100 Final Project
+ * @author Luyao Wang, Chenwei Yin
+ */
+
 public class StateNode {
   private TileType gotTile;
   private TileType discardTile;

@@ -15,15 +15,16 @@ import java.util.Set;
 import AgentBot.MonteCarloSimulation.MonteCarloSimulation;
 
 /**
- * For CS5100 Final Project.
  * One-player strategy.
+ * For CS5100 Final Project
+ * @author Luyao Wang, Chenwei Yin
  */
 public class OnePlayerStrategy {
+  private static OnePlayerStrategy s = new OnePlayerStrategy();
   private List<Tile> tilesInHand; //tiles after picking, need to discard 1.
   private List<Tile> unknownTiles;
   private List<Action> actions;
   private HandFactory factory = HandFactory.getHandFactory();
-  private static OnePlayerStrategy s = new OnePlayerStrategy();
   private int round = 0;
   private int[] aliveTileSizes;
 
@@ -33,9 +34,9 @@ public class OnePlayerStrategy {
   //not complete set
   private double lack1Base = 0;
   private double need = 0; //add need * probability of tile needed to the points
-  private int single =0; //which should be negative as punishment
+  private int single = 0; //which should be negative as punishment
 
-  public OnePlayerStrategy(){
+  public OnePlayerStrategy() {
     this.tilesInHand = new ArrayList<>();
     this.actions = new ArrayList<>();
     this.unknownTiles = new ArrayList<>();
@@ -61,7 +62,7 @@ public class OnePlayerStrategy {
   }
 
   public void setParameter(int tripletOrSequence, int tuple, int lack1Base,
-                           int need, int single){
+                           int need, int single) {
     this.tripletOrSequence = tripletOrSequence;
     this.tuple = tuple;
     this.lack1Base = lack1Base;
@@ -72,14 +73,13 @@ public class OnePlayerStrategy {
 
   /**
    * Discard action decided.
-   * @return
    */
-  public Action discardOnePlayerStategy(){
+  public Action discardOnePlayerStategy() {
     Map<TileSuit, int[]> divided = (divideBySuit(tilesInHand));
     Set<TileType> discardChoices = discardChoice(divided);
-    if(discardChoices.size() == 1){
+    if (discardChoices.size() == 1) {
       Action result = tileToAction((TileType) discardChoices.toArray()[0]);
-      System.out.println("Action: " + result.toString() );
+      System.out.println("Action: " + result.toString());
       return result;
     }
     TileType best = (TileType) discardChoices.toArray()[0];
@@ -110,10 +110,10 @@ public class OnePlayerStrategy {
     int[][] numRank = new int[3][9];
     int[] nonNumRank = new int[7];
     buildTable(numRank, nonNumRank, leftTileWall);
-    for (List<TileType> hand: plyerHands.values()) {
-      for (TileType tile: hand) {
+    for (List<TileType> hand : plyerHands.values()) {
+      for (TileType tile : hand) {
         if (tile.isNumberRank()) {
-          numRank[checkRank(tile)][tile.number()-1]--;
+          numRank[checkRank(tile)][tile.number() - 1]--;
         } else {
           nonNumRank[tile.notNumberIndex()]--;
         }
@@ -123,7 +123,7 @@ public class OnePlayerStrategy {
       for (int j = 0; j < 9; j++) {
         int count = numRank[i][j];
         while (count > 0) {
-          leftTileWall.add(TileType.of(checkRankName(i), j+1));
+          leftTileWall.add(TileType.of(checkRankName(i), j + 1));
           count--;
         }
       }
@@ -136,18 +136,16 @@ public class OnePlayerStrategy {
 
   /**
    * WAN = 0, BING = 1, TIAO = 2
-   * @param numRank
-   * @param nonNumRank
    */
   private void buildTable(int[][] numRank, int[] nonNumRank, List<TileType> leftTileWall) {
-    for (Tile tile: unknownTiles) {
+    for (Tile tile : unknownTiles) {
       TileType tileType = tile.type();
       if (tileType.suit().equals(TileSuit.HUA)) {
         leftTileWall.add(tileType);
         continue;
       }
       if (tileType.isNumberRank()) {
-        int number = tileType.number()-1;
+        int number = tileType.number() - 1;
         int rank = checkRank(tileType);
         numRank[rank][number]++;
       } else {
@@ -158,9 +156,12 @@ public class OnePlayerStrategy {
 
   private TileSuit checkRankName(int i) {
     switch (i) {
-      case 0: return TileSuit.WAN;
-      case 1: return TileSuit.BING;
-      case 2: return TileSuit.TIAO;
+      case 0:
+        return TileSuit.WAN;
+      case 1:
+        return TileSuit.BING;
+      case 2:
+        return TileSuit.TIAO;
     }
     return null;
   }
@@ -175,20 +176,21 @@ public class OnePlayerStrategy {
     }
     return -1;
   }
+
   /**
    *
    */
-  public double maxGrade(int[] oneSuit, TileSuit suit){
+  public double maxGrade(int[] oneSuit, TileSuit suit) {
     Set<List<String>> combinations;
-    if(suit.equals(TileSuit.ZI)){
+    if (suit.equals(TileSuit.ZI)) {
       combinations = factory.combinationForWindDragon(oneSuit);
-    } else{
+    } else {
       combinations = factory.getCombination(oneSuit);
     }
 //    System.out.println(suit+": " + combinations.toString());
 
-    double maxGrade = - Double.MAX_VALUE;
-    for(List<String> comb:combinations) {
+    double maxGrade = -Double.MAX_VALUE;
+    for (List<String> comb : combinations) {
       Map<String, List<Integer>> gradeHelper = factory.gradeHelper(
               comb,
               oneSuit);
@@ -204,17 +206,17 @@ public class OnePlayerStrategy {
       grade += lack1Base * numSet;
       inCompleteInfo.remove(0);
       double inCompleteGrade = 0;
-      for(Integer incomplete : inCompleteInfo){
+      for (Integer incomplete : inCompleteInfo) {
         inCompleteGrade += need * ((numUnknowTileType(TileType.of(suit,
-                incomplete+1))/ 4.00) + 1);
+                incomplete + 1)) / 4.00) + 1);
       }
-      grade += inCompleteGrade/numSet;
-      for(Integer s: gradeHelper.get(HandFactory.SINGLE)){
-        grade += s * ( -1 + single * 2);
+      grade += inCompleteGrade / numSet;
+      for (Integer s : gradeHelper.get(HandFactory.SINGLE)) {
+        grade += s * (-1 + single * 2);
       }
-      if(grade > maxGrade) maxGrade = grade;
+      if (grade > maxGrade) maxGrade = grade;
     }
-      return maxGrade;
+    return maxGrade;
   }
 
 
@@ -225,9 +227,9 @@ public class OnePlayerStrategy {
   public Map<TileSuit, int[]> inHandDiscard1(Map<TileSuit,
           int[]> divided, TileType discard) {
     Map<TileSuit, int[]> dividedCopy = new HashMap<>(divided);
-    if(discard.isNumberRank()){
-      dividedCopy.get(discard.suit())[discard.number()-1] -= 1;
-    } else{
+    if (discard.isNumberRank()) {
+      dividedCopy.get(discard.suit())[discard.number() - 1] -= 1;
+    } else {
       dividedCopy.get(discard.suit())[discard.notNumberIndex()] -= 1;
     }
     return dividedCopy;
@@ -247,9 +249,9 @@ public class OnePlayerStrategy {
     int[] stick = new int[9];
     int[] ball = new int[9];
     for (Tile tile : tiles) {
-      if(!tile.type().isNumberRank()){
+      if (!tile.type().isNumberRank()) {
         //ignore hua suit
-        if(tile.type().suit().equals(TileSuit.ZI)) windAndDragon[tile.type
+        if (tile.type().suit().equals(TileSuit.ZI)) windAndDragon[tile.type
                 ().notNumberIndex()]++;
         continue;
       }
@@ -278,9 +280,9 @@ public class OnePlayerStrategy {
     int[] stick = new int[9];
     int[] ball = new int[9];
     for (TileType tileType : tiles) {
-      if(!tileType.isNumberRank()){
+      if (!tileType.isNumberRank()) {
         //ignore hua suit
-        if(tileType.suit().equals(TileSuit.ZI)) windAndDragon[tileType.notNumberIndex()]++;
+        if (tileType.suit().equals(TileSuit.ZI)) windAndDragon[tileType.notNumberIndex()]++;
         continue;
       }
       switch (tileType.suit()) {
@@ -305,13 +307,11 @@ public class OnePlayerStrategy {
 
   /**
    * The number of a tile type unknown.
-   * @param tileType
-   * @return
    */
-  private int numUnknowTileType(TileType tileType){
+  private int numUnknowTileType(TileType tileType) {
     Map<TileSuit, int[]> dividedUnknown = divideBySuit(unknownTiles);
-    if(tileType.isNumberRank()){
-      return dividedUnknown.get(tileType.suit())[tileType.number()-1];
+    if (tileType.isNumberRank()) {
+      return dividedUnknown.get(tileType.suit())[tileType.number() - 1];
     } else {
       return dividedUnknown.get(tileType.suit())[tileType.notNumberIndex()];
     }
@@ -327,8 +327,8 @@ public class OnePlayerStrategy {
     Set<TileType> discardChoices = new HashSet<>();
     //for winds and dragons
     int[] windsAndDragon = groupedTiles.get(TileSuit.ZI);
-    for(int i = 0; i<windsAndDragon.length; i++){
-      if(windsAndDragon[i] == 1){
+    for (int i = 0; i < windsAndDragon.length; i++) {
+      if (windsAndDragon[i] == 1) {
         discardChoices.add(TileType.of(TileSuit.ZI, i));
         return discardChoices;
       }
@@ -342,16 +342,16 @@ public class OnePlayerStrategy {
           //for independent
           boolean independent = empty(i, 1, tilesInSuit)
                   && empty(i, 2, tilesInSuit)
-                  && empty(i,-1,tilesInSuit)
+                  && empty(i, -1, tilesInSuit)
                   && empty(i, -2, tilesInSuit);
           discardChoices.add(TileType.of(suit, i + 1));
-          if(independent){
+          if (independent) {
             return discardChoices;
           }
         }
         if (tilesInSuit[i] < 3) {
-          if(suit.equals(TileSuit.ZI)){
-            discardChoices.add(TileType.of(suit,i));
+          if (suit.equals(TileSuit.ZI)) {
+            discardChoices.add(TileType.of(suit, i));
           } else {
             discardChoices.add(TileType.of(suit, i + 1));
           }
@@ -361,9 +361,9 @@ public class OnePlayerStrategy {
     return discardChoices;
   }
 
-  private boolean empty(int index, int distance, int[] array){
+  private boolean empty(int index, int distance, int[] array) {
     int newIndex = index + distance;
-    return newIndex < 0 || newIndex>=array.length || array[newIndex] == 0;
+    return newIndex < 0 || newIndex >= array.length || array[newIndex] == 0;
   }
 
   /**

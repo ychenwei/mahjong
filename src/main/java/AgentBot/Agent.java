@@ -21,13 +21,15 @@ import static com.github.blovemaple.mj.action.standard.StandardActionType.BUHUA;
 import static com.github.blovemaple.mj.action.standard.StandardActionType.WIN;
 
 /**
- * For CS5100 Final Project.
  * Agent bot.
+ * For CS5100 Final Project
+ * @author Luyao Wang, Chenwei Yin
  */
+
 public class Agent extends AbstractBot {
   private PlayerLocation playerLocation;
 
-//  private OnePlayerStrategy strategy = OnePlayerStrategy.getInstance();
+  //  private OnePlayerStrategy strategy = OnePlayerStrategy.getInstance();
   private OnePlayerStrategy strategy = new OnePlayerStrategy();
   private int round = 0;
 
@@ -37,7 +39,7 @@ public class Agent extends AbstractBot {
 
   public Agent() {
     this("Agent");
-    strategy.setParameter(10,5,1,1,-1);
+    strategy.setParameter(10, 5, 1, 1, -1);
   }
 
 
@@ -46,7 +48,7 @@ public class Agent extends AbstractBot {
     round++;
     System.out.println("round " + round + ": ");
     System.out.println("Agent in hand: " + getCurrentHand(contextView));
-    if(actions.size() ==1) return actions.get(0);
+    if (actions.size() == 1) return actions.get(0);
 
     if (actionTypes.contains(WIN))
       return new Action(WIN);
@@ -68,19 +70,19 @@ public class Agent extends AbstractBot {
 //      return new Action(ANGANG);
 
     List<Action> notDiscard = actions.stream().filter(action -> {
-              if(action == null || action.getType()== null || action.getType()
+              if (action == null || action.getType() == null || action.getType()
                       .name() == null)
                 return false;
               return !action.getType().name().equalsIgnoreCase("discard");
-    }
-            ).collect(Collectors.toList());
-    if(!notDiscard.isEmpty()) return notDiscard.get(0);
-    strategy.setTiles(new ArrayList<>(getCurrentHand(contextView)),actions,getUnknownTiles
-            (contextView.getMyInfo(),contextView));
+            }
+    ).collect(Collectors.toList());
+    if (!notDiscard.isEmpty()) return notDiscard.get(0);
+    strategy.setTiles(new ArrayList<>(getCurrentHand(contextView)), actions, getUnknownTiles
+            (contextView.getMyInfo(), contextView));
 //    System.out.println("Actions: " + actions.toString());
     int[] sizesForPlayer = new int[3];
     int index = 0;
-    for (Map.Entry<PlayerLocation, PlayerInfoPlayerView> view: contextView.getTableView().getPlayerInfoView().entrySet()) {
+    for (Map.Entry<PlayerLocation, PlayerInfoPlayerView> view : contextView.getTableView().getPlayerInfoView().entrySet()) {
       if (view.getKey().equals(contextView.getMyLocation())) {
         continue;
       }
@@ -113,7 +115,7 @@ public class Agent extends AbstractBot {
             {
               unknownTiles.removeAll(playerInfoPlayerView.getDiscardedTiles());
               for (TileGroupPlayerView group : playerInfoPlayerView.getTileGroups()) {
-                if(group == null || group.getTiles() == null) continue;
+                if (group == null || group.getTiles() == null) continue;
                 unknownTiles.removeAll(group.getTiles());
               }
             });

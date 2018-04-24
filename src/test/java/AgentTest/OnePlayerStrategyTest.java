@@ -24,13 +24,13 @@ public class OnePlayerStrategyTest {
   OnePlayerStrategy strategy = new OnePlayerStrategy();
 
   @Before
-  public void setup(){
-    for(int i =0; i<9; i++){
-      numbers[i] = TileType.of(TileSuit.WAN,i+1);
-      sticks[i] = TileType.of(TileSuit.TIAO, i+1);
-      balls[i] = TileType.of(TileSuit.BING,i+1);
-      if(i<7){
-        windsAndDragons[i] = TileType.of(TileSuit.ZI,i);
+  public void setup() {
+    for (int i = 0; i < 9; i++) {
+      numbers[i] = TileType.of(TileSuit.WAN, i + 1);
+      sticks[i] = TileType.of(TileSuit.TIAO, i + 1);
+      balls[i] = TileType.of(TileSuit.BING, i + 1);
+      if (i < 7) {
+        windsAndDragons[i] = TileType.of(TileSuit.ZI, i);
       }
 
     }
@@ -45,47 +45,47 @@ public class OnePlayerStrategyTest {
   }
 
   @Test
-  public void testConstructTile(){
-    TileType threeStick = TileType.of(TileSuit.TIAO,3);
-    Assert.assertEquals(threeStick.toString(),"SAN TIAO");
+  public void testConstructTile() {
+    TileType threeStick = TileType.of(TileSuit.TIAO, 3);
+    Assert.assertEquals(threeStick.toString(), "SAN TIAO");
   }
 
   @Test
-  public void testDivideBySuit(){
+  public void testDivideBySuit() {
     List<Tile> tiles = new ArrayList<>();
-    tiles.add(Tile.of(numbers[0],1));
-    tiles.add(Tile.of(numbers[0],2));
-    tiles.add(Tile.of(sticks[2],2));
-    tiles.add(Tile.of(balls[3],1));
-    tiles.add(Tile.of(windsAndDragons[2],2));
-    tiles.add(Tile.of(TileType.of(TileSuit.HUA, TileRank.HuaRank.CHUN),0));
+    tiles.add(Tile.of(numbers[0], 1));
+    tiles.add(Tile.of(numbers[0], 2));
+    tiles.add(Tile.of(sticks[2], 2));
+    tiles.add(Tile.of(balls[3], 1));
+    tiles.add(Tile.of(windsAndDragons[2], 2));
+    tiles.add(Tile.of(TileType.of(TileSuit.HUA, TileRank.HuaRank.CHUN), 0));
 
     System.out.println(tiles.toString());
     Map<TileSuit, int[]> divided = strategy.divideBySuit(tiles);
-    divided.forEach((suit,set) -> System.out.print(suit
-            + ": "+ arrayToString(set)));
+    divided.forEach((suit, set) -> System.out.print(suit
+            + ": " + arrayToString(set)));
 
     //test discard 1
     Map<TileSuit, int[]> afterDiscard = strategy.inHandDiscard1(divided,
             windsAndDragons[2]);
     System.out.println();
-    afterDiscard.forEach((suit,set) -> System.out.print(suit
-            + ": "+ arrayToString(set)));
+    afterDiscard.forEach((suit, set) -> System.out.print(suit
+            + ": " + arrayToString(set)));
   }
 
 
   @Test
-  public void testDiscardChoices(){
+  public void testDiscardChoices() {
     Map<TileSuit, int[]> hand = new HashMap<>();
     Map<TileSuit, int[]> hand1 = new HashMap<>();
     Map<TileSuit, int[]> hand2 = new HashMap<>();
 //round 1
-    int[] windsAndDragons = {0,1,1,1,0,0,0};
-    int[] balls = {1,0,0,0,1,0,0,1,0};
-    int[] sticks = {0,1,3,0,1,1,1,0,1};
+    int[] windsAndDragons = {0, 1, 1, 1, 0, 0, 0};
+    int[] balls = {1, 0, 0, 0, 1, 0, 0, 1, 0};
+    int[] sticks = {0, 1, 3, 0, 1, 1, 1, 0, 1};
     hand.put(TileSuit.ZI, windsAndDragons);
     hand1.put(TileSuit.BING, balls);
-    hand2.put(TileSuit.TIAO,sticks);
+    hand2.put(TileSuit.TIAO, sticks);
     System.out.println(strategy.discardChoice(hand));
     System.out.println(strategy.discardChoice(hand1));
     System.out.println(strategy.discardChoice(hand2));

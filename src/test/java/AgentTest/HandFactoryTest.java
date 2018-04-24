@@ -12,23 +12,23 @@ public class HandFactoryTest {
   private HandFactory factory = HandFactory.getHandFactory();
 
   @Test
-  public void testGetCombination(){
-    int[] hand = {0,1,1,2,1,1,0,0,3};
+  public void testGetCombination() {
+    int[] hand = {0, 1, 1, 2, 1, 1, 0, 0, 3};
 //    int[] hand = {1,1,1,0,3,0,0,0,3};
     System.out.println(factory.getCombination
             (hand).toString());
   }
 
   @Test
-  public void testCombWindsAndDragon(){
-    int[] windsAndDragons = {0,1,2,0,3,0,0};
+  public void testCombWindsAndDragon() {
+    int[] windsAndDragons = {0, 1, 2, 0, 3, 0, 0};
     System.out.println(factory.combinationForWindDragon(windsAndDragons));
   }
 
   @Test
-  public void testGradeHelper(){
+  public void testGradeHelper() {
     List<String> comb = new ArrayList<>();
-    int[] array = {1,1,3,0,4,4,1,1,2};
+    int[] array = {1, 1, 3, 0, 4, 4, 1, 1, 2};
     comb.add("01");
     comb.add("22");
     comb.add("24");
@@ -36,7 +36,7 @@ public class HandFactoryTest {
     comb.add("5555");
     comb.add("678");
     comb.add("8");
-    Map<String, List<Integer>> helper = factory.gradeHelper(comb,array);
-    helper.forEach((key,value) -> System.out.println(key +": "+ value.toString()));
+    Map<String, List<Integer>> helper = factory.gradeHelper(comb, array);
+    helper.forEach((key, value) -> System.out.println(key + ": " + value.toString()));
   }
 }

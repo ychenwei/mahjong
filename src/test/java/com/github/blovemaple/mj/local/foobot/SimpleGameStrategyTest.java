@@ -15,39 +15,39 @@ import com.github.blovemaple.mj.object.TileType;
 import com.github.blovemaple.mj.rule.simple.SimpleGameStrategy;
 
 public class SimpleGameStrategyTest {
-	@SuppressWarnings("unused")
-	private SimpleGameStrategy strategy = new SimpleGameStrategy();
-	private PlayerInfo selfInfo;
+  @SuppressWarnings("unused")
+  private SimpleGameStrategy strategy = new SimpleGameStrategy();
+  private PlayerInfo selfInfo;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
+  @BeforeClass
+  public static void setUpBeforeClass() throws Exception {
+  }
 
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
+  @AfterClass
+  public static void tearDownAfterClass() throws Exception {
+  }
 
-	@Before
-	public void setUp() throws Exception {
-		selfInfo = new PlayerInfo();
+  @Before
+  public void setUp() throws Exception {
+    selfInfo = new PlayerInfo();
 
-		selfInfo.getAliveTiles().add(Tile.of(TileType.of(TIAO, YI), 0));
-		selfInfo.getAliveTiles().add(Tile.of(TileType.of(TIAO, YI), 1));
-		selfInfo.getAliveTiles().add(Tile.of(TileType.of(TIAO, ER), 0));
-		selfInfo.getAliveTiles().add(Tile.of(TileType.of(TIAO, SAN), 0));
-		selfInfo.getAliveTiles().add(Tile.of(TileType.of(TIAO, SI), 0));
-		selfInfo.getAliveTiles().add(Tile.of(TileType.of(BING, YI), 0));
-		selfInfo.getAliveTiles().add(Tile.of(TileType.of(BING, YI), 1));
-		selfInfo.getAliveTiles().add(Tile.of(TileType.of(BING, YI), 2));
-	}
+    selfInfo.getAliveTiles().add(Tile.of(TileType.of(TIAO, YI), 0));
+    selfInfo.getAliveTiles().add(Tile.of(TileType.of(TIAO, YI), 1));
+    selfInfo.getAliveTiles().add(Tile.of(TileType.of(TIAO, ER), 0));
+    selfInfo.getAliveTiles().add(Tile.of(TileType.of(TIAO, SAN), 0));
+    selfInfo.getAliveTiles().add(Tile.of(TileType.of(TIAO, SI), 0));
+    selfInfo.getAliveTiles().add(Tile.of(TileType.of(BING, YI), 0));
+    selfInfo.getAliveTiles().add(Tile.of(TileType.of(BING, YI), 1));
+    selfInfo.getAliveTiles().add(Tile.of(TileType.of(BING, YI), 2));
+  }
 
-	@After
-	public void tearDown() throws Exception {
-	}
+  @After
+  public void tearDown() throws Exception {
+  }
 
-	@Test
-	public void test() {
-		// strategy.getFans(selfInfo, null).forEach((a, b) -> System.out.println(a + " " + b));
-	}
+  @Test
+  public void test() {
+    // strategy.getFans(selfInfo, null).forEach((a, b) -> System.out.println(a + " " + b));
+  }
 
 }

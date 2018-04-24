@@ -11,22 +11,25 @@ import java.util.stream.Collectors;
 
 /**
  * Deal with one suit combinations.
+ * For CS5100 Final Project
+ * @author Luyao Wang, Chenwei Yin
  */
+
 public class HandFactory {
-//  private Map<int[], Set<List<String>>> combinationCache;
-  private static HandFactory handFactory = new HandFactory();
   public final static String COMPLETE = "complete";
   public final static String TUPLE = "tuple";
   public final static String INCOMPLETE = "incomplete";
   public final static String SINGLE = "single";
+  //  private Map<int[], Set<List<String>>> combinationCache;
+  private static HandFactory handFactory = new HandFactory();
 
-
-  public static HandFactory getHandFactory() {
-    return handFactory;
-  }
 
   private HandFactory() {
 //    this.combinationCache = new HashMap<>(); //todo: may load from some text file.
+  }
+
+  public static HandFactory getHandFactory() {
+    return handFactory;
   }
 
   public Set<List<String>> getCombination(int[] inHand) {
@@ -54,7 +57,7 @@ public class HandFactory {
           for (List<String> s : a) {
             s.add(cSet);
             s.sort(Comparator.naturalOrder());
-            if(s.equals(""))continue;
+            if (s.equals("")) continue;
             newA.add(s);
           }
           result.addAll(newA);
@@ -93,34 +96,34 @@ public class HandFactory {
    * Get all combinations for winds and dragons.
    */
   public Set<List<String>> combinationForWindDragon(int[] suit) {
-    if(suit.length != 7) throw new IllegalArgumentException("Not wind and "
+    if (suit.length != 7) throw new IllegalArgumentException("Not wind and "
             + "dragon suit length");
     //Dragon and suits.
     Set<List<String>> combinations = new HashSet<>();
-      List<String> element = new ArrayList<>();
-      for (int i = 0; i < suit.length; i++) {
-        String s = "";
-        for (int j = 0; j < suit[i]; j++) {
-          s += i;
-        }
-        if(s!=""){
-          element.add(s);
-        }
+    List<String> element = new ArrayList<>();
+    for (int i = 0; i < suit.length; i++) {
+      String s = "";
+      for (int j = 0; j < suit[i]; j++) {
+        s += i;
       }
-      combinations.add(element);
-      return combinations;
+      if (s != "") {
+        element.add(s);
+      }
+    }
+    combinations.add(element);
+    return combinations;
   }
 
 
   public int singleDistance(int single, int[] hand) {
     int i = 0;
     boolean end = false;
-    if(single<0 || single>=hand.length) throw new IllegalArgumentException
+    if (single < 0 || single >= hand.length) throw new IllegalArgumentException
             ("Single tile is not valid" + single);
     while (!end) {
       boolean toRight = (single + i) >= hand.length;
       boolean toLeft = (single - i) < 0;
-      if(toRight && toLeft) break;
+      if (toRight && toLeft) break;
       if (!toRight && hand[single + i] != 0) {
         return i;
       }
@@ -135,9 +138,9 @@ public class HandFactory {
   /**
    * Map stores for one combination：
    * Complete: hashSet with 2 elements: number of complete sets(size 4)
-   *                                    number of complete sets(size 3)
+   * number of complete sets(size 3)
    * Incomplete: 0:number of incomplete sets
-   *             1+: all the indexes of tiles waiting for
+   * 1+: all the indexes of tiles waiting for
    * tuple: hashSet with 1 element: number of tuples
    * single: minimum distances for all the single tile
    */
@@ -153,11 +156,11 @@ public class HandFactory {
     int incompleteNum = 0;
     int tupleNum = 0;
     for (String s : comb) {
-      if(s.trim().length() == 4){
-        fourNum ++;
+      if (s.trim().length() == 4) {
+        fourNum++;
       }
       if (s.trim().length() == 3) {
-        completeNum ++;
+        completeNum++;
       } else if (s.trim().length() == 1) {
         map.get(SINGLE).add(singleDistance(Integer.parseInt(s.trim()), inHand));
       } else if (s.trim().length() == 2) {
@@ -165,7 +168,7 @@ public class HandFactory {
         if (incomplete.isTuple()) {
           tupleNum++;
         } else {
-          incompleteNum ++ ;
+          incompleteNum++;
           map.get(INCOMPLETE).addAll(incomplete.want());
         }
       }

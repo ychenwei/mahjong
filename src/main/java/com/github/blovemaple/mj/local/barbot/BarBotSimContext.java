@@ -19,124 +19,123 @@ import com.github.blovemaple.mj.utils.MyUtils;
 /**
  * 模拟选择时执行动作使用的GameContext。因为是机器人任务使用，所以只能从GameContext.PlayerView构建，
  * 只允许获取PlayerView能看到的一些信息。
- * 
+ *
  * @author blovemaple <blovemaple2010(at)gmail.com>
  */
 @Deprecated
 public class BarBotSimContext implements GameContext {
-	private GameStrategy gameStrategy;
-	private TimeLimitStrategy timeLimitStrategy;
-	
-	private GameContextPlayerView contextView;
-	private ActionAndLocation lastAction;
-	private PlayerInfo myInfo;
+  private GameStrategy gameStrategy;
+  private TimeLimitStrategy timeLimitStrategy;
 
-	public BarBotSimContext(GameContextPlayerView contextView, ActionAndLocation lastAction, PlayerInfo myInfo) {
-		this.gameStrategy = contextView.getGameStrategy();
-		this.timeLimitStrategy = contextView.getTimeLimitStrategy();
-		this.contextView = contextView;
-		this.lastAction = lastAction;
-		this.myInfo = myInfo;
-	}
+  private GameContextPlayerView contextView;
+  private ActionAndLocation lastAction;
+  private PlayerInfo myInfo;
+  private List<ActionAndLocation> doneActions;
 
-	@Override
-	public MahjongTable getTable() {
-		throw new UnsupportedOperationException();
-	}
+  public BarBotSimContext(GameContextPlayerView contextView, ActionAndLocation lastAction, PlayerInfo myInfo) {
+    this.gameStrategy = contextView.getGameStrategy();
+    this.timeLimitStrategy = contextView.getTimeLimitStrategy();
+    this.contextView = contextView;
+    this.lastAction = lastAction;
+    this.myInfo = myInfo;
+  }
 
-	@Override
-	public GameStrategy getGameStrategy() {
-		return gameStrategy;
-	}
+  @Override
+  public MahjongTable getTable() {
+    throw new UnsupportedOperationException();
+  }
 
-	@Override
-	public TimeLimitStrategy getTimeLimitStrategy() {
-		return timeLimitStrategy;
-	}
+  @Override
+  public GameStrategy getGameStrategy() {
+    return gameStrategy;
+  }
 
-	@Override
-	public PlayerInfo getPlayerInfoByLocation(PlayerLocation location) {
-		if (location == contextView.getMyLocation())
-			return myInfo;
-		else
-			throw new UnsupportedOperationException();
-	}
+  @Override
+  public TimeLimitStrategy getTimeLimitStrategy() {
+    return timeLimitStrategy;
+  }
 
-	@Override
-	public PlayerLocation getZhuangLocation() {
-		return contextView.getZhuangLocation();
-	}
+  @Override
+  public PlayerInfo getPlayerInfoByLocation(PlayerLocation location) {
+    if (location == contextView.getMyLocation())
+      return myInfo;
+    else
+      throw new UnsupportedOperationException();
+  }
 
-	@Override
-	public void setZhuangLocation(PlayerLocation zhuangLocation) {
-		throw new UnsupportedOperationException();
-	}
+  @Override
+  public PlayerLocation getZhuangLocation() {
+    return contextView.getZhuangLocation();
+  }
 
-	@Override
-	public void actionDone(Action action, PlayerLocation location) {
-		throw new UnsupportedOperationException();
-	}
+  @Override
+  public void setZhuangLocation(PlayerLocation zhuangLocation) {
+    throw new UnsupportedOperationException();
+  }
 
-	@Override
-	public ActionAndLocation getLastActionAndLocation() {
-		if (lastAction == null)
-			return contextView.getLastActionAndLocation();
-		else
-			return lastAction;
-	}
+  @Override
+  public void actionDone(Action action, PlayerLocation location) {
+    throw new UnsupportedOperationException();
+  }
 
-	@Override
-	public Action getLastAction() {
-		if (lastAction == null)
-			return contextView.getLastAction();
-		else
-			return lastAction.getAction();
-	}
+  @Override
+  public ActionAndLocation getLastActionAndLocation() {
+    if (lastAction == null)
+      return contextView.getLastActionAndLocation();
+    else
+      return lastAction;
+  }
 
-	@Override
-	public PlayerLocation getLastActionLocation() {
-		if (lastAction == null)
-			return contextView.getLastActionLocation();
-		else
-			return lastAction.getLocation();
-	}
+  @Override
+  public Action getLastAction() {
+    if (lastAction == null)
+      return contextView.getLastAction();
+    else
+      return lastAction.getAction();
+  }
 
-	private List<ActionAndLocation> doneActions;
+  @Override
+  public PlayerLocation getLastActionLocation() {
+    if (lastAction == null)
+      return contextView.getLastActionLocation();
+    else
+      return lastAction.getLocation();
+  }
 
-	@Override
-	public List<ActionAndLocation> getDoneActions() {
-		if (doneActions == null) {
-			if (lastAction == null)
-				doneActions = contextView.getDoneActions();
-			else
-				doneActions = MyUtils.merged(ArrayList<ActionAndLocation>::new, contextView.getDoneActions(),
-						lastAction);
-		}
-		return doneActions;
-	}
+  @Override
+  public List<ActionAndLocation> getDoneActions() {
+    if (doneActions == null) {
+      if (lastAction == null)
+        doneActions = contextView.getDoneActions();
+      else
+        doneActions = MyUtils.merged(ArrayList<ActionAndLocation>::new, contextView.getDoneActions(),
+                lastAction);
+    }
+    return doneActions;
+  }
 
-	@Override
-	public GameResult getGameResult() {
-		return contextView.getGameResult();
-	}
+  @Override
+  public GameResult getGameResult() {
+    return contextView.getGameResult();
+  }
 
-	@Override
-	public void setGameResult(GameResult gameResult) {
-		throw new UnsupportedOperationException();
-	}
+  @Override
+  public void setGameResult(GameResult gameResult) {
+    throw new UnsupportedOperationException();
+  }
 
-	@Override
-	public GameContextPlayerView getPlayerView(PlayerLocation location) {
-		if (location == contextView.getMyLocation())
-			return new GameContextPlayerViewImpl(this, location);
-		else
-			throw new UnsupportedOperationException();
-	}
+  @Override
+  public GameContextPlayerView getPlayerView(PlayerLocation location) {
+    if (location == contextView.getMyLocation())
+      return new GameContextPlayerViewImpl(this, location);
+    else
+      throw new UnsupportedOperationException();
+  }
 
-	@Override
-	public String toString() {
-		return "[last action=" + getLastActionAndLocation() + ", alive tiles=" + myInfo.getAliveTiles()
-				+ "]";
-	}
+  @Override
+  public String toString() {
+    return "[last action=" + getLastActionAndLocation() + ", alive tiles=" + myInfo.getAliveTiles()
+            + "]";
+  }
 
 }

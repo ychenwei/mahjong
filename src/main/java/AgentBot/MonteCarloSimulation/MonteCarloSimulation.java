@@ -14,6 +14,11 @@ import java.util.concurrent.TimeUnit;
 import AgentBot.OnePlayerStrategy;
 import AgentBot.WinJudge;
 
+/**
+ * For CS5100 Final Project
+ * @author Luyao Wang, Chenwei Yin
+ */
+
 public class MonteCarloSimulation {
   private List<TileType> leftTileWall;
   private OnePlayerStrategy agentStrat;
@@ -25,7 +30,7 @@ public class MonteCarloSimulation {
 //    this.agentStrat = OnePlayerStrategy.getInstance();
     this.agentStrat = new OnePlayerStrategy();
     this.myHand = new ArrayList<>();
-    for (Tile tile: originHand) {
+    for (Tile tile : originHand) {
       myHand.add(tile.type());
     }
     this.simuHands = simuHands;
@@ -38,10 +43,10 @@ public class MonteCarloSimulation {
     //todo:try the tile with highest UTC
     //choose the tile with max score to discard
     Map<TileType, StateNode> discardCandis = new HashMap<>();
-    for (TileType candi: discardChoices) {
+    for (TileType candi : discardChoices) {
       discardCandis.put(candi, new StateNode(null, candi, null));
     }
-    while (TimeUnit.NANOSECONDS.toSeconds(System.nanoTime()-startTime) < 10) {
+    while (TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - startTime) < 10) {
       for (TileType tileType : discardChoices) {
         StateNode root = discardCandis.get(tileType);
         List<TileType> curtMyHand = new ArrayList<>(myHand);
@@ -70,7 +75,7 @@ public class MonteCarloSimulation {
           return root.getReward();
         }
         TileType next = leftTileWall.remove(new Random().nextInt(leftTileWall.size()));
-        nextNode = (i == 4)? myTurn(i, curtNode, next, curtMyHand):otherTurn(i, curtNode, next, curtMyHand);
+        nextNode = (i == 4) ? myTurn(i, curtNode, next, curtMyHand) : otherTurn(i, curtNode, next, curtMyHand);
         if (nextNode == null) {
           return root.getReward();
         }
@@ -81,7 +86,6 @@ public class MonteCarloSimulation {
 
   /**
    * Assume other player get a tile and discard it right away
-   * @return
    */
   private StateNode otherTurn(int id, StateNode parent, TileType newTile, List<TileType> myCurtHand) {
 //    System.out.println("enter other turn");
@@ -111,7 +115,7 @@ public class MonteCarloSimulation {
   private boolean checkZiMo(int id, StateNode curtNode, TileType newTile, List<TileType> curtHand) {
     boolean isZiMo = isWin(newTile, curtHand);
     if (isZiMo) {
-      int curtReward = (id == 4)? 3:-1;
+      int curtReward = (id == 4) ? 3 : -1;
       curtNode.setReward(curtReward);
       return true;
     }
@@ -130,7 +134,7 @@ public class MonteCarloSimulation {
     Set<TileType> discardCandis = agentStrat.discardChoice(agentStrat.divideTypeBySuit(curtHand));
     int rd = new Random().nextInt(discardCandis.size());
     int i = 0;
-    for (TileType toDiscard: discardCandis) {
+    for (TileType toDiscard : discardCandis) {
       if (i == rd) {
         newNode.setDiscardTile(toDiscard);
         curtHand.remove(toDiscard);
@@ -150,13 +154,13 @@ public class MonteCarloSimulation {
 
   private boolean checkMeDianPao(StateNode curtNode, TileType newTile) {
     int numOfWinPlys = 0;
-    for (Map.Entry<Integer, List<TileType>> ply: simuHands.entrySet()) {
+    for (Map.Entry<Integer, List<TileType>> ply : simuHands.entrySet()) {
       if (isWin(newTile, ply.getValue())) {
         numOfWinPlys += 1;
       }
     }
-    curtNode.setReward(curtNode.getReward()-numOfWinPlys);
-    return numOfWinPlys!=0;
+    curtNode.setReward(curtNode.getReward() - numOfWinPlys);
+    return numOfWinPlys != 0;
   }
 
   private void backPropagation(StateNode node) {
